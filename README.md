@@ -1,19 +1,9 @@
 # storymock
 
-Build mocks from stories. A TypeScript-first library with three layers: **fakers** for values, **schemas** for objects, and **stories** for related data.
+Composable, type-safe builders for generating related mock data.
 
 ```sh
-# npm
 npm install storymock
-
-# yarn
-yarn add storymock
-
-# pnpm
-pnpm add storymock
-
-# bun
-bun add storymock
 ```
 
 ## Overview
@@ -115,5 +105,4 @@ Full docs site: run `cd docs && pnpm install && pnpm dev`
 
 **More:**
 - [Examples](https://storymock.dev/examples) — Complete working examples
-- [Changelog](https://storymock.dev/changelog)
 - [Contributing](CONTRIBUTION_GUIDE.md) — Architecture and design decisions

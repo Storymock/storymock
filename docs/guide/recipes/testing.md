@@ -1,6 +1,10 @@
-# Vitest
+---
+description: Use storymock with Vitest or Jest — global seeding, shared schemas, and snapshot testing.
+---
 
-storymock works with Vitest out of the box. This recipe covers global seeding, test helpers, and component testing patterns.
+# Testing Frameworks
+
+storymock works with any test framework. This recipe covers Vitest and Jest.
 
 ## Setup
 
@@ -15,10 +19,11 @@ import { configure } from 'storymock';
 configure({ seed: 42 });
 ```
 
-Register it in your Vitest config:
+Register it in your test framework config:
 
-```typescript
-// vitest.config.ts
+::: code-group
+
+```typescript [vitest.config.ts]
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -27,6 +32,15 @@ export default defineConfig({
   },
 });
 ```
+
+```typescript [jest.config.ts]
+export default {
+  setupFilesAfterSetup: ['./tests/setup.ts'],
+  // ...
+};
+```
+
+:::
 
 Now every test run produces the same data — great for snapshot tests and CI stability.
 
@@ -122,3 +136,5 @@ Because the seed is fixed, the snapshot is stable across runs. Change the schema
 - Use `configure({ seed: 42 })` in a global setup file for deterministic CI
 - Use `.seed()` on individual schemas when you need a specific test to be deterministic without affecting others
 - Story-level `.seed()` makes entire multi-object snapshots stable
+- **Jest**: Use `setupFilesAfterSetup` (not `setupFiles`) to ensure Jest globals are available
+- **Jest**: If you use `ts-jest` or `@swc/jest`, no extra config is needed — storymock is pure TypeScript and works out of the box

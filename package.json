@@ -1,7 +1,7 @@
 {
   "name": "storymock",,
   "version": "0.0.2",
-  "description": "",
+  "description": "Composable, type-safe builders for generating related mock data."
   "main": "index.js",
   "scripts": {
     "start": "tsx src/index.ts",

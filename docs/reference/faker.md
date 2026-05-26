@@ -1,3 +1,7 @@
+---
+description: Complete API reference for all faker domains, mixins, providers, and extensibility.
+---
+
 # Faker — API Reference
 
 > Part of [storymock](/). Import from `'storymock'` or `'storymock/faker'`.

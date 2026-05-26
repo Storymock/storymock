@@ -2,7 +2,8 @@ import { defineConfig } from 'vitepress';
 
 export default defineConfig({
   title: 'storymock',
-  description: 'Build mocks from stories. TypeScript-first mocking library.',
+  description:
+    'Composable, type-safe builders for generating related mock data.',
   cleanUrls: true,
   appearance: 'dark',
 
@@ -15,7 +16,7 @@ export default defineConfig({
       {
         property: 'og:description',
         content:
-          'Build mocks from stories. TypeScript-first mocking library with fakers, schemas, and stories.',
+          'Composable, type-safe builders for generating related mock data.',
       },
     ],
     ['meta', { property: 'og:url', content: 'https://storymock.dev' }],
@@ -51,8 +52,7 @@ export default defineConfig({
           text: 'Recipes',
           items: [
             { text: 'Overview', link: '/guide/recipes/' },
-            { text: 'Vitest', link: '/guide/recipes/vitest' },
-            { text: 'Jest', link: '/guide/recipes/jest' },
+            { text: 'Vitest & Jest', link: '/guide/recipes/testing' },
             { text: 'Prisma', link: '/guide/recipes/prisma' },
             { text: 'Storybook', link: '/guide/recipes/storybook' },
           ],
@@ -107,7 +107,7 @@ export default defineConfig({
 
     footer: {
       message:
-        'Released under the <a href="https://github.com/storymock/storymock/blob/main/LICENSE" target="_blank">MIT License</a>.',
+        'Released under the <a href="https://github.com/storymock/storymock/blob/main/LICENSE" target="_blank">MIT License</a>. <a href="https://github.com/storymock/storymock/blob/main/CONTRIBUTION_GUIDE.md" target="_blank">Contributing</a>',
       copyright:
         'Copyright © 2025-present <a href="https://github.com/storymock" target="_blank">storymock</a>',
     },

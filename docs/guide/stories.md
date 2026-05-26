@@ -1,3 +1,7 @@
+---
+description: Compose multiple schemas into coherent, relationally-linked test datasets.
+---
+
 # Working with Stories
 
 A progressive tutorial on composing coherent, related mock datasets with storymock stories.

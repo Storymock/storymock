@@ -1,3 +1,7 @@
+---
+description: Compact cheat sheet for the full storymock API — fakers, schemas, stories, and configuration.
+---
+
 # Quick Reference
 
 Compact cheat sheet for storymock's API surface. See the full guide for detailed explanations.

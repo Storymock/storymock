@@ -179,7 +179,7 @@ async function run() {
 
       <Transition name="output">
         <div v-if="outputVisible" class="output-panel" :key="runCount">
-          <div class="output-label">Output</div>
+          <div class="output-label">Example output</div>
           <pre class="output-block"><code>{{ currentOutput }}</code></pre>
         </div>
       </Transition>

@@ -1,3 +1,7 @@
+---
+description: Seed your Prisma database with realistic, relational mock data.
+---
+
 # Prisma
 
 Use storymock to seed your development database with realistic, relational data that matches your Prisma models.

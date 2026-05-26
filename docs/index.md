@@ -1,10 +1,11 @@
 ---
+description: Composable, type-safe builders for generating related mock data.
 layout: home
 
 hero:
   name: storymock
   text: Build mocks from stories
-  tagline: A TypeScript-first library that composes fakers, schemas, and stories into coherent, type-safe test data.
+  tagline: Composable, type-safe builders for generating related mock data.
   actions:
     - theme: brand
       text: Get Started →
@@ -41,7 +42,7 @@ features:
 
 ## See it in action
 
-Click **▶️ Run** to generate mock data. Click again for different output — every run is unique.
+Click **▶ Run** to see example output. Click again for a different sample.
 
 <PlaygroundDemo />
 

@@ -1,3 +1,7 @@
+---
+description: Complete API reference for schemas — field types, traits, when(), derive(), and .id().
+---
+
 # Schema — API Reference
 
 > Part of [storymock](/). Import from `'storymock'` or `'storymock/schema'`.
@@ -24,7 +28,7 @@ A schema is a typed factory for generating mock objects. It maps each field of a
 ## 1. Schema Definition
 
 ```typescript
-import { schema, numeric, text, temporal, person, choice, collection } from 'storymock';
+import { schema, numeric, text, temporal, person, choice, collection, lorem } from 'storymock';
 
 interface User {
   id: string;

@@ -1,8 +1,10 @@
+---
+description: Self-contained TypeScript examples for every storymock feature.
+---
+
 # Examples
 
 Self-contained TypeScript examples, each highlighting a **storymock feature**. Run any example with `npx tsx examples/<file>.ts`.
-
----
 
 ## Fakers & Composability
 
@@ -16,11 +18,19 @@ Core domains, semantic domains, constraint chaining, composability, batch genera
 - Batch (`.create(5)`) and unique (`.unique().create(3)`)
 - `.nullable()` and `.optional()`
 
+```typescript
+import { numeric, text, person, temporal, choice } from 'storymock';
+
+const id    = text().uuid().create();                     // '550e8400-e29b-...'
+const age   = person().age().min(18).max(65).create();    // 34
+const price = numeric().min(1).max(999).precision(2).create(); // 42.99
+const date  = temporal().year(numeric().min(2020).max(2025)).create(); // Date
+const roles = choice('viewer', 'editor', 'admin').unique().create(3);
+```
+
 ::: info Try it
 [View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/fakers-and-composability.ts) · [Open in StackBlitz ⚡️](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/fakers-and-composability.ts)
 :::
-
----
 
 ## Traits & Customization
 
@@ -34,11 +44,23 @@ Named states, combining traits, inline overrides, immutable forking.
 - Traits + overrides: `.with('urgent', { assignee: 'Alice' })`
 - Immutable forking: base schema unchanged after `.with()`
 
+```typescript
+import { schema, text, lorem, person, choice, collection } from 'storymock';
+
+const TaskSchema = schema<Task>({
+  id: text().uuid(),
+  title: lorem().sentence(),
+  priority: choice('low', 'medium', 'high'),
+  assignee: person().fullName(),
+}).trait('urgent', { priority: 'high' as const });
+
+TaskSchema.with('urgent').create();
+TaskSchema.with('urgent', { assignee: 'Alice' }).create();
+```
+
 ::: info Try it
 [View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/traits-and-customization.ts) · [Open in StackBlitz ⚡️](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/traits-and-customization.ts)
 :::
-
----
 
 ## Conditional Fields
 
@@ -52,11 +74,24 @@ Named states, combining traits, inline overrides, immutable forking.
 - `derive()` returning a faker instead of a literal
 - Field resolution order (DAG)
 
+```typescript
+import { schema, choice, numeric, derive, when } from 'storymock';
+
+const CouponSchema = schema<Coupon>({
+  type: choice('percentage', 'fixed'),
+  value: when('type', {
+    percentage: numeric().min(5).max(100),
+    fixed: numeric().min(10).max(500).precision(2),
+  }),
+  label: derive(({ type, value }) =>
+    type === 'percentage' ? `${value}% OFF` : `$${value} OFF`
+  ),
+});
+```
+
 ::: info Try it
 [View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/conditional-fields.ts) · [Open in StackBlitz ⚡️](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/conditional-fields.ts)
 :::
-
----
 
 ## Story Composition
 
@@ -70,11 +105,22 @@ Named states, combining traits, inline overrides, immutable forking.
 - `.setup()` for complex relationship wiring
 - Inline overrides with `ref()`
 
+```typescript
+import { story, ref } from 'storymock';
+
+const blogStory = story()
+  .add('author', AuthorSchema)
+  .addMany('posts', PostSchema, 3, { authorId: ref('author') })
+  .add('comment', CommentSchema, { authorId: ref('author') })
+  .setup((m) => { m.comment.postId = m.posts[0].id; });
+
+const { author, posts, comment } = blogStory.create();
+// comment.authorId === author.id ✓
+```
+
 ::: info Try it
 [View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/story-composition.ts) · [Open in StackBlitz ⚡️](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/story-composition.ts)
 :::
-
----
 
 ## Story Inheritance
 
@@ -88,11 +134,23 @@ Base stories, extending, setup accumulation, cascading `.with()`, targeting.
 - Forking independent variants from the same base
 - Reusable wiring functions
 
+```typescript
+const orgBase = story()
+  .add('org', OrgSchema)
+  .addMany('teams', TeamSchema, 2, { orgId: ref('org') });
+
+const orgWithMembers = orgBase
+  .addMany('members', MemberSchema, 4)
+  .setup(wireTeamMembers);
+
+// Fork independent variants
+const proOrg = orgWithMembers.with('org', { plan: 'pro' as const });
+const deletedOrg = orgWithMembers.with('org', 'deleted');
+```
+
 ::: info Try it
 [View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/story-inheritance.ts) · [Open in StackBlitz ⚡️](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/story-inheritance.ts)
 :::
-
----
 
 ## Seeding & Determinism
 
@@ -106,11 +164,23 @@ Base stories, extending, setup accumulation, cascading `.with()`, targeting.
 - Global seed via `configure({ seed: 42 })`
 - Deterministic test assertions
 
+```typescript
+import { numeric, schema, configure } from 'storymock';
+
+// Same seed → same value, every time
+const a = numeric().min(1).max(100).seed(42).create();
+const b = numeric().min(1).max(100).seed(42).create();
+// a === b ✓
+
+// Schema-level seed for full objects
+const user1 = UserSchema.seed(42).create();
+const user2 = UserSchema.seed(42).create();
+// user1.id === user2.id ✓
+```
+
 ::: info Try it
 [View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/seeding-and-determinism.ts) · [Open in StackBlitz ⚡️](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/seeding-and-determinism.ts)
 :::
-
----
 
 ## Running Examples
 
@@ -126,8 +196,6 @@ npx tsx examples/story-composition.ts
 npx tsx examples/story-inheritance.ts
 npx tsx examples/seeding-and-determinism.ts
 ```
-
----
 
 ## Contributing an Example
 

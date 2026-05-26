@@ -1,3 +1,7 @@
+---
+description: Generate realistic values with numeric, text, temporal, and semantic domain fakers.
+---
+
 # Working with Fakers
 
 A progressive tutorial on generating mock values with storymock fakers.

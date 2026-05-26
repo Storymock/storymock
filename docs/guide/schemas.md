@@ -1,3 +1,7 @@
+---
+description: Build typed object factories with traits, conditional fields, and computed values.
+---
+
 # Working with Schemas
 
 A progressive tutorial on building typed mock object factories with storymock schemas.
@@ -313,8 +317,6 @@ const DocSchema = schema<Doc>({ _id: text().objectId(), /* ... */ })
 const EdgeSchema = schema<Edge>({ from: text().uuid(), to: text().uuid(), /* ... */ })
   .id((edge) => `${edge.from}:${edge.to}`);
 ```
-
----
 
 ## Full API →
 

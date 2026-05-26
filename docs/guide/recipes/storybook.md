@@ -1,3 +1,7 @@
+---
+description: Generate component props and story variants with storymock schemas.
+---
+
 # Storybook
 
 Use storymock to generate props for your Storybook stories. Traits map naturally to Storybook story variants.

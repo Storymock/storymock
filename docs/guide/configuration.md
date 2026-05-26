@@ -1,3 +1,7 @@
+---
+description: Global defaults, seeding for deterministic output, and custom data providers.
+---
+
 # Configuration
 
 ## Overview

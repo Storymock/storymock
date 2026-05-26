@@ -1,3 +1,7 @@
+---
+description: Complete API reference for stories — add(), ref(), setup(), inheritance, and batch generation.
+---
+
 # Story — API Reference
 
 > Part of [storymock](/). Import from `'storymock'` or `'storymock/story'`.

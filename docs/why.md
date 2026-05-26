@@ -1,3 +1,7 @@
+---
+description: How storymock compares to faker.js, fishery, MSW, and hand-written helpers.
+---
+
 # Why storymock?
 
 Every mocking approach works for simple cases. The differences show up when your test suite grows — more objects, more states, more relationships between them. This page shows what that looks like in practice.

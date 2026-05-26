@@ -1,3 +1,7 @@
+---
+description: Every StorymockError type with causes, console output, and fixes.
+---
+
 # Errors
 
 All errors extend `StorymockError`. Errors are thrown eagerly when possible (at definition time) and lazily at `.create()` time for runtime issues.

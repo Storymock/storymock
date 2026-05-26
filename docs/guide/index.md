@@ -1,3 +1,7 @@
+---
+description: Install storymock and build your first faker, schema, trait, and story in minutes.
+---
+
 # Getting Started
 
 ## What is storymock?
@@ -7,6 +11,8 @@ storymock is a TypeScript-first mocking library built in three layers: **fakers*
 ## Installation
 
 <InstallPackage />
+
+By the end of this page you'll generate a random value, build a typed `User` object, define a reusable "admin" state, and wire two objects together — all in under 30 lines of code.
 
 ## Your first faker
 
