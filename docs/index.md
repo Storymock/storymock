@@ -41,7 +41,7 @@ features:
 
 ## See it in action
 
-Click **▶ Run** to generate mock data. Click again for different output — every run is unique.
+Click **▶️ Run** to generate mock data. Click again for different output — every run is unique.
 
 <PlaygroundDemo />
 

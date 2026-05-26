@@ -17,7 +17,7 @@ Core domains, semantic domains, constraint chaining, composability, batch genera
 - `.nullable()` and `.optional()`
 
 ::: info Try it
-[View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/fakers-and-composability.ts) · [Open in StackBlitz ⚡](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/fakers-and-composability.ts)
+[View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/fakers-and-composability.ts) · [Open in StackBlitz ⚡️](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/fakers-and-composability.ts)
 :::
 
 ---
@@ -35,7 +35,7 @@ Named states, combining traits, inline overrides, immutable forking.
 - Immutable forking: base schema unchanged after `.with()`
 
 ::: info Try it
-[View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/traits-and-customization.ts) · [Open in StackBlitz ⚡](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/traits-and-customization.ts)
+[View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/traits-and-customization.ts) · [Open in StackBlitz ⚡️](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/traits-and-customization.ts)
 :::
 
 ---
@@ -53,7 +53,7 @@ Named states, combining traits, inline overrides, immutable forking.
 - Field resolution order (DAG)
 
 ::: info Try it
-[View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/conditional-fields.ts) · [Open in StackBlitz ⚡](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/conditional-fields.ts)
+[View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/conditional-fields.ts) · [Open in StackBlitz ⚡️](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/conditional-fields.ts)
 :::
 
 ---
@@ -71,7 +71,7 @@ Named states, combining traits, inline overrides, immutable forking.
 - Inline overrides with `ref()`
 
 ::: info Try it
-[View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/story-composition.ts) · [Open in StackBlitz ⚡](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/story-composition.ts)
+[View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/story-composition.ts) · [Open in StackBlitz ⚡️](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/story-composition.ts)
 :::
 
 ---
@@ -89,7 +89,7 @@ Base stories, extending, setup accumulation, cascading `.with()`, targeting.
 - Reusable wiring functions
 
 ::: info Try it
-[View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/story-inheritance.ts) · [Open in StackBlitz ⚡](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/story-inheritance.ts)
+[View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/story-inheritance.ts) · [Open in StackBlitz ⚡️](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/story-inheritance.ts)
 :::
 
 ---
@@ -107,7 +107,7 @@ Base stories, extending, setup accumulation, cascading `.with()`, targeting.
 - Deterministic test assertions
 
 ::: info Try it
-[View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/seeding-and-determinism.ts) · [Open in StackBlitz ⚡](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/seeding-and-determinism.ts)
+[View source on GitHub](https://github.com/storymock/storymock/blob/main/examples/seeding-and-determinism.ts) · [Open in StackBlitz ⚡️](https://stackblitz.com/github/storymock/storymock/tree/main?file=examples/seeding-and-determinism.ts)
 :::
 
 ---

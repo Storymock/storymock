@@ -1,10 +1,19 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, shallowRef } from 'vue'
+import { createHighlighter, type Highlighter } from 'shiki'
 
 const activeTab = ref<'faker' | 'schema' | 'story'>('faker')
 const outputVisible = ref(false)
 const runCount = ref(0)
 const isAnimating = ref(false)
+const highlighter = shallowRef<Highlighter | null>(null)
+
+onMounted(async () => {
+  highlighter.value = await createHighlighter({
+    themes: ['github-dark', 'github-light'],
+    langs: ['typescript'],
+  })
+})
 
 const tabs = [
   { id: 'faker' as const, label: 'Faker', icon: '🎲' },
@@ -104,6 +113,18 @@ const currentOutput = computed(() => {
   return outputs[runCount.value % outputs.length]
 })
 
+const highlightedCode = computed(() => {
+  if (!highlighter.value) return ''
+  return highlighter.value.codeToHtml(currentExample.value.code, {
+    lang: 'typescript',
+    themes: {
+      light: 'github-light',
+      dark: 'github-dark',
+    },
+    defaultColor: false,
+  })
+})
+
 function switchTab(id: 'faker' | 'schema' | 'story') {
   activeTab.value = id
   outputVisible.value = false
@@ -142,14 +163,15 @@ async function run() {
         @click="run"
         :disabled="isAnimating"
       >
-        <span class="run-icon">▶</span>
+        <span class="run-icon">▶️</span>
         {{ outputVisible ? 'Re-run' : 'Run' }}
       </button>
     </div>
 
     <div class="playground-body">
       <div class="code-panel">
-        <pre class="code-block"><code>{{ currentExample.code }}</code></pre>
+        <div v-if="highlightedCode" class="code-block highlighted" v-html="highlightedCode"></div>
+        <pre v-else class="code-block"><code>{{ currentExample.code }}</code></pre>
       </div>
 
       <Transition name="output">
@@ -266,6 +288,20 @@ async function run() {
 .code-block code {
   font-family: var(--vp-font-family-mono);
   color: var(--vp-c-text-1);
+}
+
+.code-block.highlighted :deep(pre) {
+  margin: 0;
+  padding: 20px 24px;
+  background: var(--vp-code-block-bg) !important;
+  font-size: 13.5px;
+  line-height: 1.7;
+  overflow-x: auto;
+  border-radius: 0;
+}
+
+.code-block.highlighted :deep(code) {
+  font-family: var(--vp-font-family-mono);
 }
 
 .output-panel {
