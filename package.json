@@ -1,7 +1,7 @@
 {
-  "name": "storymock",,
+  "name": "storymock",
   "version": "0.0.2",
-  "description": "Composable, type-safe builders for generating related mock data."
+  "description": "Composable, type-safe builders for generating related mock data.",
   "main": "index.js",
   "scripts": {
     "start": "tsx src/index.ts",
@@ -9,7 +9,14 @@
     "lint": "biome check ./src"
   },
   "type": "module",
-  "keywords": ["mock", "faker", "testing", "mocking", "test", "stub"],
+  "keywords": [
+    "mock",
+    "faker",
+    "testing",
+    "mocking",
+    "test",
+    "stub"
+  ],
   "author": "PCOffline",
   "license": "GPL-3.0-only",
   "packageManager": "pnpm@11.3.0",
