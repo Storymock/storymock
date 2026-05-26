@@ -68,6 +68,28 @@ export default defineConfig({
             { text: 'Story API', link: '/reference/story' },
           ],
         },
+        {
+          text: 'Domains',
+          collapsed: true,
+          items: [
+            { text: 'numeric()', link: '/reference/domains/numeric' },
+            { text: 'text()', link: '/reference/domains/text' },
+            { text: 'temporal()', link: '/reference/domains/temporal' },
+            { text: 'bool()', link: '/reference/domains/bool' },
+            { text: 'choice()', link: '/reference/domains/choice' },
+            { text: 'collection()', link: '/reference/domains/collection' },
+            { text: 'person()', link: '/reference/domains/person' },
+            { text: 'internet()', link: '/reference/domains/internet' },
+            { text: 'location()', link: '/reference/domains/location' },
+            { text: 'commerce()', link: '/reference/domains/commerce' },
+            { text: 'finance()', link: '/reference/domains/finance' },
+            { text: 'company()', link: '/reference/domains/company' },
+            { text: 'lorem()', link: '/reference/domains/lorem' },
+            { text: 'food()', link: '/reference/domains/food' },
+            { text: 'system()', link: '/reference/domains/system' },
+            { text: 'image()', link: '/reference/domains/image' },
+          ],
+        },
       ],
       '/examples': [
         {

@@ -40,41 +40,41 @@ choice('a','b','c').unique().create(2)       // ['c', 'a']
 
 ## Core Domains
 
-**`numeric()`**
+**[`numeric()`](/reference/domains/numeric)**
 - Constraints: `.min()` `.max()` `.between()` `.positive()` `.negative()` `.not()`
 - Type: `.int()` `.float()` `.precision()`
 - Format → string: `.hex()` `.binary()` `.octal()`
 
-**`text()`**
+**[`text()`](/reference/domains/text)**
 - Length: `.length()` `.minLength()` `.maxLength()`
 - Charset: `.alpha()` `.digits()` `.lowercase()` `.uppercase()`
 - IDs: `.uuid()` `.ulid()` `.nanoid()` `.cuid()` `.objectId()` `.slug()`
 - Pattern: `.regex()` `.template()`
 
-**`temporal()`**
+**[`temporal()`](/reference/domains/temporal)**
 - Relative: `.past()` `.future()` `.recent()` `.soon()` `.today()` `.daysAgo()` `.yearsAgo()` etc.
 - Absolute: `.year()` `.month()` `.day()` `.weekday()`
 - Range: `.between()` `.before()` `.after()` `.thisMonth()` `.lastYear()` etc.
 - Format: `.iso()` `.timestamp()` `.format()`
 
-**`bool()`** — `.probability()` `.true()` `.false()`
+**[`bool()`](/reference/domains/bool)** — `.probability()` `.true()` `.false()`
 
-**`choice()`** — `.weighted()` `.not()` `.unique()`
+**[`choice()`](/reference/domains/choice)** — `.weighted()` `.not()` `.unique()`
 
-**`collection()`** — `.length()` `.minLength()` `.maxLength()` `.unique()` `.empty()`
+**[`collection()`](/reference/domains/collection)** — `.length()` `.minLength()` `.maxLength()` `.unique()` `.empty()`
 
 ---
 
 ## Semantic Domains
 
-- `person()` — `.firstName()` `.lastName()` `.fullName()` `.gender()` `.age()` `.birthdate()` `.jobTitle()` `.bio()`
-- `internet()` — `.email()` `.username()` `.url()` `.ip()` `.ipv6()` `.port()` `.userAgent()` `.domainName()` `.password()`
-- `location()` — `.city()` `.country()` `.state()` `.zipCode()` `.latitude()` `.longitude()` `.streetAddress()`
-- `finance()` — `.currency()` `.currencyCode()` `.accountNumber()` `.iban()` `.bic()` `.creditCard()`
-- `lorem()` — `.word()` `.words()` `.sentence()` `.sentences()` `.paragraph()` `.paragraphs()`
-- `image()` — `.avatar()` `.url()` `.dataUri()` `.placeholder()`
+- [`person()`](/reference/domains/person) — `.firstName()` `.lastName()` `.fullName()` `.gender()` `.age()` `.birthdate()` `.jobTitle()` `.bio()`
+- [`internet()`](/reference/domains/internet) — `.email()` `.username()` `.url()` `.ip()` `.ipv6()` `.port()` `.userAgent()` `.domainName()` `.password()`
+- [`location()`](/reference/domains/location) — `.city()` `.country()` `.state()` `.zipCode()` `.latitude()` `.longitude()` `.streetAddress()`
+- [`finance()`](/reference/domains/finance) — `.currency()` `.currencyCode()` `.accountNumber()` `.iban()` `.bic()` `.creditCard()`
+- [`lorem()`](/reference/domains/lorem) — `.word()` `.words()` `.sentence()` `.sentences()` `.paragraph()` `.paragraphs()`
+- [`image()`](/reference/domains/image) — `.avatar()` `.url()` `.dataUri()` `.placeholder()`
 - `phone()` — `.number()` `.imei()`
-- `company()` — `.name()` `.catchPhrase()` `.buzzPhrase()`
+- [`company()`](/reference/domains/company) — `.name()` `.catchPhrase()` `.buzzPhrase()`
 - `color()` — `.hex()` `.rgb()` `.hsl()` `.human()`
 
 ---

@@ -189,12 +189,7 @@ git clone https://github.com/storymock/storymock.git
 cd storymock
 pnpm install
 
-npx tsx examples/fakers-and-composability.ts
-npx tsx examples/traits-and-customization.ts
-npx tsx examples/conditional-fields.ts
-npx tsx examples/story-composition.ts
-npx tsx examples/story-inheritance.ts
-npx tsx examples/seeding-and-determinism.ts
+npx tsx examples/file.ts
 ```
 
 ## Contributing an Example
