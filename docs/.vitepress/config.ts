@@ -6,15 +6,27 @@ export default defineConfig({
   cleanUrls: true,
   appearance: 'dark',
 
+  head: [
+    ['meta', { name: 'theme-color', content: '#7c3aed' }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:title', content: 'storymock' }],
+    [
+      'meta',
+      {
+        property: 'og:description',
+        content:
+          'Build mocks from stories. TypeScript-first mocking library with fakers, schemas, and stories.',
+      },
+    ],
+    ['meta', { property: 'og:url', content: 'https://storymock.dev' }],
+  ],
+
   themeConfig: {
     nav: [
       { text: 'Guide', link: '/guide/' },
       { text: 'API Reference', link: '/reference/' },
       { text: 'Examples', link: '/examples' },
-      {
-        text: 'StackBlitz',
-        link: 'https://stackblitz.com/github/storymock/storymock/tree/main',
-      },
+      { text: 'Why storymock?', link: '/why' },
       {
         text: 'GitHub',
         link: 'https://github.com/storymock/storymock',
@@ -33,6 +45,16 @@ export default defineConfig({
             { text: 'Working with Stories', link: '/guide/stories' },
             { text: 'Configuration', link: '/guide/configuration' },
             { text: 'Errors', link: '/guide/errors' },
+          ],
+        },
+        {
+          text: 'Recipes',
+          items: [
+            { text: 'Overview', link: '/guide/recipes/' },
+            { text: 'Vitest', link: '/guide/recipes/vitest' },
+            { text: 'Jest', link: '/guide/recipes/jest' },
+            { text: 'Prisma', link: '/guide/recipes/prisma' },
+            { text: 'Storybook', link: '/guide/recipes/storybook' },
           ],
         },
       ],
@@ -84,8 +106,15 @@ export default defineConfig({
     },
 
     footer: {
-      message: 'MIT License',
-      copyright: 'storymock',
+      message:
+        'Released under the <a href="https://github.com/storymock/storymock/blob/main/LICENSE" target="_blank">MIT License</a>.',
+      copyright:
+        'Copyright © 2025-present <a href="https://github.com/storymock" target="_blank">storymock</a>',
+    },
+
+    editLink: {
+      pattern: 'https://github.com/storymock/storymock/edit/main/docs/:path',
+      text: 'Edit this page on GitHub',
     },
   },
 });

@@ -2,8 +2,6 @@
 
 A progressive tutorial on building typed mock object factories with storymock schemas.
 
----
-
 ## What is a Schema?
 
 A schema is a **typed factory** for generating mock objects. You map each field of a TypeScript interface to a faker, literal value, nested schema, or helper — and the schema produces fully-typed instances via `.create()`.
@@ -36,8 +34,6 @@ const users: User[] = UserSchema.create(10);
 
 The generic `<User>` is the key — it enables compile-time validation. Miss a field, use the wrong type, or misspell a key, and TypeScript catches it before your tests ever run.
 
----
-
 ## Defining a Schema
 
 A schema definition is an object where each key matches a field on your interface. Values can be:
@@ -62,8 +58,6 @@ const ProductSchema = schema<Product>({
   tags: collection(lorem().word()).maxLength(3),     // collection faker
 });
 ```
-
----
 
 ## Nested Schemas
 
@@ -97,8 +91,6 @@ UserSchema.create();
 ```
 
 Each `.create()` call generates a fresh nested object. There's no limit to nesting depth.
-
----
 
 ## Traits — Named States
 
@@ -150,8 +142,6 @@ UserSchema.trait('bad', { email: text() });
 UserSchema.trait('bad', { age: text() });
 ```
 
----
-
 ## Customizing with .with()
 
 `.with()` is the single method for all schema customization. It supports three patterns:
@@ -199,8 +189,6 @@ const young = base.with('young');     // another new schema — independent of a
 
 This makes it safe to derive multiple variants from the same base.
 
----
-
 ## Conditional Fields: when()
 
 Sometimes a field's value should depend on a sibling. `when()` selects a faker (or literal) based on another field's resolved value.
@@ -239,8 +227,6 @@ When `type` resolves to `'percentage'`, the price is an integer 5–100. When `'
 See [`examples/conditional-fields.ts`](https://storymock.dev/examples#conditional-fields) for the complete example covering string, numeric, and boolean matching plus `derive()`.
 :::
 
----
-
 ## Computed Fields: derive()
 
 `derive()` lets you compute a field from the values of already-resolved siblings. The callback receives the resolved fields and can return a literal or a faker:
@@ -274,8 +260,6 @@ The callback can also return a faker instead of a literal — storymock will `.c
 See [`examples/conditional-fields.ts`](https://storymock.dev/examples#conditional-fields) for more `derive()` patterns.
 :::
 
----
-
 ## How Fields Resolve
 
 Fields form a **directed acyclic graph** (DAG) based on their dependencies. storymock resolves them in the right order automatically:
@@ -294,8 +278,6 @@ Fields form a **directed acyclic graph** (DAG) based on their dependencies. stor
 ```
 
 If `when()` edges create a cycle (field A depends on B, B depends on A), storymock throws a `CircularDependencyError` at schema definition time — before any data is generated.
-
----
 
 ## Schema Identity: .id()
 

@@ -78,3 +78,22 @@ div[class*="language-"] {
 .VPContent {
   transition: opacity 0.2s ease;
 }
+
+/* Footer */
+.VPFooter {
+  border-top: 1px solid var(--vp-c-divider);
+}
+
+.VPFooter .message a,
+.VPFooter .copyright a {
+  color: var(--vp-c-brand-1);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.VPFooter .message a:hover,
+.VPFooter .copyright a:hover {
+  color: var(--vp-c-brand-2);
+  text-decoration: underline;
+}

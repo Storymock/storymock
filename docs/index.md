@@ -37,46 +37,99 @@ features:
     details: "Powered by faker.js out of the box. Swap the engine or add your own data types when needed."
 ---
 
-## Quick taste
+<BadgeBar />
 
-### Fakers — generate any value
+## See it in action
+
+Click **▶ Run** to generate mock data. Click again for different output — every run is unique.
+
+<PlaygroundDemo />
+
+## The three layers
+
+Each layer builds on the one below. Use any layer on its own — or combine them for full relational datasets.
+
+<LayerDiagram />
+
+## Before & after
+
+<BeforeAfter>
+<template #without>
 
 ```typescript
-import { numeric, text, temporal, person } from 'storymock';
+// Every test re-specifies the same states manually
+const expiredAdmin = createUser({
+  role: 'admin',
+  status: 'active',
+  subscription: {
+    plan: 'enterprise',
+    expiresAt: new Date('2024-01-01'),
+    status: 'expired',
+  },
+});
+const org = createOrg({ ownerId: expiredAdmin.id });
+const team = createTeam({ orgId: org.id });
+const members = Array.from({ length: 5 }, (_, i) =>
+  createUser({
+    teamId: team.id,
+    role: i === 0 ? 'admin' : 'member',
+  })
+);
+team.memberIds = members.map(m => m.id);
+org.teamIds = [team.id];
 
-numeric().min(1).max(100).create();                         // 42
-person().firstName().create();                              // 'Günther'
-temporal().year(numeric().min(2020).max(2025)).create();    // 2023-04-17T09:11:52Z
+// Next test — same setup, slightly different state.
+// Copy, paste, tweak, hope nothing drifts.
 ```
 
-### Schemas — typed objects with named states
+</template>
+<template #with>
 
 ```typescript
-import { schema, text, person, choice } from 'storymock';
-
+// Schemas define realistic defaults + named states once
 const UserSchema = schema<User>({
   id: text().uuid(),
   name: person().fullName(),
-  status: choice('active', 'inactive'),
-})
-.trait('admin', { status: 'active' as const });
+  role: choice('admin', 'member'),
+  subscription: SubscriptionSchema,
+}).trait('expiredAdmin', {
+  role: 'admin' as const,
+  subscription: SubscriptionSchema.with('expired'),
+});
 
-UserSchema.create();                // { id: '7b3e...', name: 'Obi Nduka', status: 'inactive' }
-UserSchema.with('admin').create();  // { id: 'f1a4...', name: 'Yuki Tanaka', status: 'active' }
+// Stories compose objects and wire relationships
+const orgStory = story()
+  .add('owner', UserSchema.with('expiredAdmin'))
+  .add('org', OrgSchema, { ownerId: ref('owner') })
+  .addMany('members', UserSchema, 5)
+  .setup(wireTeamMembers);
+
+// Tests only express what's different
+orgStory.create();
+orgStory.with('owner', 'active').create();
+orgStory.with('members[0]', 'admin').create();
 ```
 
-### Stories — coherent related data
+</template>
+</BeforeAfter>
 
-```typescript
-import { story, ref } from 'storymock';
+<div style="text-align: center; margin: 2rem 0 3rem;">
+  <a href="/guide/" class="action-link">Get started →</a>
+  &nbsp;&nbsp;·&nbsp;&nbsp;
+  <a href="/why" class="action-link secondary">Why storymock?</a>
+</div>
 
-const checkout = story()
-  .add('user', UserSchema)
-  .add('order', OrderSchema, { userId: ref('user') })
-  .setup((m) => { m.user.orders = [m.order]; });
-
-const { user, order } = checkout.create();
-// order.userId === user.id ✓
-```
-
-[Get started →](/guide/)
+<style>
+.action-link {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--vp-c-brand-1);
+  text-decoration: none;
+}
+.action-link:hover {
+  text-decoration: underline;
+}
+.action-link.secondary {
+  color: var(--vp-c-text-2);
+}
+</style>

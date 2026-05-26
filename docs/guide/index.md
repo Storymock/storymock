@@ -6,9 +6,7 @@ storymock is a TypeScript-first mocking library built in three layers: **fakers*
 
 ## Installation
 
-```bash
-npm install storymock
-```
+<InstallPackage />
 
 ## Your first faker
 

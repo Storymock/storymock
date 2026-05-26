@@ -2,8 +2,18 @@
 
 Build mocks from stories. A TypeScript-first library with three layers: **fakers** for values, **schemas** for objects, and **stories** for related data.
 
-```
+```sh
+# npm
+npm install storymock
+
+# yarn
+yarn add storymock
+
+# pnpm
 pnpm add storymock
+
+# bun
+bun add storymock
 ```
 
 ## Overview

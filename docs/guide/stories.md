@@ -2,8 +2,6 @@
 
 A progressive tutorial on composing coherent, related mock datasets with storymock stories.
 
----
-
 ## What is a Story?
 
 A story composes multiple schema instances into a **coherent, typed record** — a snapshot of related data where foreign keys match, arrays are wired, and everything fits together. Think of it as "these objects exist together in the same world."
@@ -22,8 +20,6 @@ const checkout = story()
 // checkout.order is an Order
 // checkout.order.userId === checkout.user.id  ✓
 ```
-
----
 
 ## Building a Story
 
@@ -48,8 +44,6 @@ story()                                       // Story<{}>
 ```
 
 Every field is fully typed — `s.user` is `User`, `s.items` is `Item[]`. No casts needed.
-
----
 
 ## Cross-References: ref()
 
@@ -125,8 +119,6 @@ If you need per-entry variation (e.g., distributing orders across different user
 ```
 :::
 
----
-
 ## Wiring with .setup()
 
 `ref()` handles scalar foreign keys beautifully, but some relationships need more: array membership, computed values, or distributing items across collections. That's where `.setup()` comes in.
@@ -170,8 +162,6 @@ const withCoupon = base
 
 The base story's wiring is never lost — derived stories just add more on top.
 
----
-
 ## When to Use ref() vs .setup()
 
 | Pattern | Use | Example |
@@ -193,8 +183,6 @@ The base story's wiring is never lost — derived stories just add more on top.
   });
 })
 ```
-
----
 
 ## Customizing Entries: .with()
 
@@ -233,8 +221,6 @@ To target a specific item by index:
 baseStory.with('items[0]', 'premium');         // only the first item
 baseStory.with('items[2]', { price: 9999 });   // only the third item
 ```
-
----
 
 ## Story Inheritance
 
@@ -277,8 +263,6 @@ See [`examples/story-inheritance.ts`](https://storymock.dev/examples#story-inher
 
 This pattern — define once, reuse everywhere — eliminates the duplicated wiring logic that makes test fixtures painful to maintain.
 
----
-
 ## Story-Level derive()
 
 Sometimes you need to compute additional data from the generated mocks. Story-level `derive()` runs after all `.setup()` callbacks, so it sees the fully-wired state:
@@ -300,8 +284,6 @@ const s = story()
 
 The derived entry becomes part of the typed record, just like any `.add()` entry.
 
----
-
 ## Reusable Wiring Functions
 
 When the same wiring logic appears across multiple stories, extract it into a plain function and pass it to `.setup()`:
@@ -319,8 +301,6 @@ const large = story().add('org', OrgSchema).addMany('teams', TeamSchema, 5).setu
 ::: info Full example
 See [`examples/story-inheritance.ts`](https://storymock.dev/examples#story-inheritance) for the complete pattern with multiple reusable wiring functions.
 :::
-
----
 
 ## Full API →
 

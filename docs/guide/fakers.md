@@ -2,8 +2,6 @@
 
 A progressive tutorial on generating mock values with storymock fakers.
 
----
-
 ## What is a Faker?
 
 A faker is an **immutable, lazy builder** that describes how to generate a value. You chain constraints to shape the output, then call `.create()` to produce a result. Nothing happens until `.create()` — the chain just builds up a recipe.
@@ -27,8 +25,6 @@ age.create();       // 7
 ```
 
 Constraints are **last-write-wins** — calling `.min(18)` on a faker that already has a min replaces it. This is how you refine defaults from [semantic domains](#semantic-domains) like `person().age().min(18).max(80)`.
-
----
 
 ## Numbers
 
@@ -78,8 +74,6 @@ numeric().hex().min(0)
 ```
 :::
 
----
-
 ## Text
 
 `text()` generates structural strings — random characters, identifiers, and patterns. For real-world data like names or emails, use [semantic domains](#semantic-domains) instead.
@@ -124,8 +118,6 @@ When you need strings matching a specific shape:
 text().regex(/[A-Z]{3}-\d{4}/).create();           // 'XKQ-3847'
 text().template('user-{{uuid}}').create();          // 'user-550e8400-...'
 ```
-
----
 
 ## Dates & Times
 
@@ -194,8 +186,6 @@ temporal().past().timestamp().create();     // 1716700800000
 temporal().format('YYYY-MM-DD').create();   // '2025-03-14'
 ```
 
----
-
 ## Booleans & Choices
 
 ### Booleans
@@ -238,8 +228,6 @@ choice('a', 'b', 'c', 'd').not('b', 'd').create();   // 'a' or 'c'
 > choice('a', 'b', 'c', 'd').unique().create(2);       // ['c', 'a']
 > ```
 
----
-
 ## Collections
 
 `collection()` wraps a faker (or schema) and produces an array. Default length is `[1, 5]`.
@@ -264,8 +252,6 @@ Use `.empty()` when you explicitly want an empty array:
 ```typescript
 collection(numeric()).empty().create();                      // []
 ```
-
----
 
 ## Semantic Domains
 
@@ -307,8 +293,6 @@ Notice the pattern: `person().age()` returns a `NumericFaker`, so `.min()` and `
 | `image()` | `avatar()`, `url()`, `dataUri()`, `placeholder()` |
 | `airline()` | `name()`, `airport()`, `flightNumber()`, `seat()` |
 
----
-
 ## Composability
 
 Fakers can accept other fakers as arguments. The inner faker is resolved at `.create()` time:
@@ -322,8 +306,6 @@ temporal().yearsAgo(numeric().min(18).max(80)).create();  // 1971-02-08T16:45:23
 ```
 
 This keeps everything lazy — the inner `numeric()` isn't evaluated when you build the chain. It's resolved fresh each time `.create()` runs, so every call can produce a different year.
-
----
 
 ## Batch & Unique
 
@@ -347,8 +329,6 @@ choice('a', 'b', 'c').unique().create(3);     // ['b', 'c', 'a']
 
 If the faker can't produce enough unique values (e.g., `.unique().create(20)` on a range of 10), it throws a `ContradictoryConstraintError`.
 
----
-
 ## Nullable & Optional
 
 Any faker can produce `null` or `undefined` via the Nullable mixin:
@@ -364,8 +344,6 @@ Both accept an optional probability (0–1) controlling how often the null/undef
 text().nullable(0.3).create();                // 30% null
 person().fullName().optional(0.1).create();   // 10% undefined
 ```
-
----
 
 ## Full API →
 
