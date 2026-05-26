@@ -24,7 +24,7 @@ Every method returns a **new instance** — fakers are immutable, so you can saf
 
 ```typescript
 const age = numeric().min(0).max(120);
-const adultAge = age.min(18);          // new instance — age is unchanged
+const adultAge = age.min(18); // new instance — age is unchanged
 
 adultAge.create();   // 34
 age.create();        // 7

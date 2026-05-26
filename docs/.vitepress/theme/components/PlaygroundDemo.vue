@@ -25,27 +25,27 @@ const examples = {
   faker: {
     code: `import { numeric, person, text, temporal, choice } from 'storymock';
 
-const age    = numeric().min(18).max(65).create();
-const name   = person().fullName().create();
-const id     = text().uuid().create();
-const born   = temporal().past(50).iso().create();
-const status = choice('active', 'inactive').create();`,
+const age    = numeric().min(18).max(65).create();     // 34
+const name   = person().fullName().create();           // "Yuki Tanaka"
+const id     = text().uuid().create();                 // "7b3e1d09-a4c2-..."
+const born   = temporal().past(50).iso().create();     // "2001-03-14T08:23:41.000Z"
+const status = choice('active', 'inactive').create();  // "active" or "inactive"`,
     outputs: [
-      `age    → 34
-name   → 'Yuki Tanaka'
-id     → '7b3e1d09-a4c2-4f8b-9e6d-1a2b3c4d5e6f'
-born   → '2001-03-14T08:23:41.000Z'
-status → 'active'`,
-      `age    → 52
-name   → 'Amara Osei'
-id     → 'e72f1a9b-5c8d-4e2a-b3f7-9d0a1b2c3d4e'
-born   → '1987-11-22T14:05:47.000Z'
-status → 'inactive'`,
-      `age    → 21
-name   → 'Diego Fuentes'
-id     → '550e8400-e29b-41d4-a716-446655440000'
-born   → '2004-07-03T18:29:55.000Z'
-status → 'active'`,
+      `age:    34
+name:   "Yuki Tanaka"
+id:     "7b3e1d09-a4c2-4f8b-9e6d-1a2b3c4d5e6f"
+born:   "2001-03-14T08:23:41.000Z"
+status: "active"`,
+      `age:    52
+name:   "Amara Osei"
+id:     "e72f1a9b-5c8d-4e2a-b3f7-9d0a1b2c3d4e"
+born:   "1987-11-22T14:05:47.000Z"
+status: "inactive"`,
+      `age:    21
+name:   "Diego Fuentes"
+id:     "550e8400-e29b-41d4-a716-446655440000"
+born:   "2004-07-03T18:29:55.000Z"
+status: "active"`,
     ],
   },
   schema: {
@@ -58,7 +58,8 @@ const UserSchema = schema<User>({
   status: choice('active', 'inactive'),
 }).trait('admin', { role: 'admin' as const });
 
-UserSchema.with('admin').create();`,
+const user = UserSchema.with('admin').create();
+// { id: "7b3e...", name: "Yuki Tanaka", role: "admin", status: "active" }`,
     outputs: [
       `{
   id:     '7b3e1d09-a4c2-4f8b-...',
@@ -86,23 +87,25 @@ UserSchema.with('admin').create();`,
 const checkout = story()
   .add('user', UserSchema)
   .add('order', OrderSchema, { userId: ref('user') })
-  .create();`,
+  .create();
+// checkout.user  = { id: "a1b2c3d4", name: "Amara Osei" }
+// checkout.order = { id: "e5f6a7b8", userId: "a1b2c3d4", total: 129.99 }`,
     outputs: [
       `{
-  user:  { id: 'a1b2c3d4', name: 'Amara Osei' },
-  order: { id: 'e5f6a7b8', userId: 'a1b2c3d4', total: 129.99 }
+  user:  { id: "a1b2c3d4", name: "Amara Osei" },
+  order: { id: "e5f6a7b8", userId: "a1b2c3d4", total: 129.99 }
 }
-✓ order.userId === user.id`,
+order.userId === user.id  // true`,
       `{
-  user:  { id: 'f9e8d7c6', name: 'Lena Björk' },
-  order: { id: '1a2b3c4d', userId: 'f9e8d7c6', total: 42.50 }
+  user:  { id: "f9e8d7c6", name: "Lena Bj\u00f6rk" },
+  order: { id: "1a2b3c4d", userId: "f9e8d7c6", total: 42.50 }
 }
-✓ order.userId === user.id`,
+order.userId === user.id  // true`,
       `{
-  user:  { id: '5e6f7a8b', name: 'Diego Fuentes' },
-  order: { id: '9c0d1e2f', userId: '5e6f7a8b', total: 384.00 }
+  user:  { id: "5e6f7a8b", name: "Diego Fuentes" },
+  order: { id: "9c0d1e2f", userId: "5e6f7a8b", total: 384.00 }
 }
-✓ order.userId === user.id`,
+order.userId === user.id  // true`,
     ],
   },
 }
@@ -163,7 +166,7 @@ async function run() {
         @click="run"
         :disabled="isAnimating"
       >
-        <span class="run-icon">▶️</span>
+        <svg class="run-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l10-5.5z"/></svg>
         {{ outputVisible ? 'Re-run' : 'Run' }}
       </button>
     </div>
@@ -263,7 +266,9 @@ async function run() {
 }
 
 .run-icon {
-  font-size: 10px;
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
 }
 
 .playground-body {
@@ -302,6 +307,16 @@ async function run() {
 
 .code-block.highlighted :deep(code) {
   font-family: var(--vp-font-family-mono);
+}
+
+.code-block.highlighted :deep(.shiki),
+.code-block.highlighted :deep(.shiki span) {
+  color: var(--shiki-light);
+}
+
+.dark .code-block.highlighted :deep(.shiki),
+.dark .code-block.highlighted :deep(.shiki span) {
+  color: var(--shiki-dark);
 }
 
 .output-panel {
