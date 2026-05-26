@@ -343,7 +343,7 @@ Fields form a **directed acyclic graph** (DAG) based on their dependencies:
 3. **Create time:** Resolve fields in topological order, passing results to dependents
 4. **Create time:** Resolve all `derive()` fields last
 
-```
+```text
 // Example for CouponSchema:
 // 1. type       (no deps)
 // 2. status     (no deps)

@@ -21,7 +21,7 @@ numeric().between(1, 3).unique().create(5);
 
 You'll see one of these messages in your console:
 
-```
+```text
 StorymockError [ContradictoryConstraintError]:
   Cannot generate value — min (10) is greater than max (5).
 
@@ -29,7 +29,7 @@ StorymockError [ContradictoryConstraintError]:
                 ───────  ──────
 ```
 
-```
+```text
 StorymockError [ContradictoryConstraintError]:
   Cannot generate value — all choices have been excluded.
 
@@ -39,7 +39,7 @@ StorymockError [ContradictoryConstraintError]:
   At least one choice must remain after .not() exclusions.
 ```
 
-```
+```text
 StorymockError [ContradictoryConstraintError]:
   Cannot generate 5 unique values — only 3 possible values exist in range [1, 3].
 
@@ -72,7 +72,7 @@ const s = schema<{ a: string; b: string }>({
 
 This error is caught immediately — before `.create()` is ever called:
 
-```
+```text
 StorymockError [CircularDependencyError]:
   Circular dependency detected in schema field resolution.
 
@@ -111,7 +111,7 @@ s.create(); // MissingCaseError when status is 'active' or 'pending'
 
 The error tells you exactly which value fell through:
 
-```
+```text
 StorymockError [MissingCaseError]:
   No matching case for when('status').
 
@@ -149,7 +149,7 @@ person().firstName().create();
 // UnsupportedProviderError — MinimalProvider has no 'person' module
 ```
 
-```
+```text
 StorymockError [UnsupportedProviderError]:
   Provider "MinimalProvider" does not support the 'person' domain.
 
@@ -191,7 +191,7 @@ User.trait('wrong', { age: text() }); // age expects number, got text
 
 Each sub-case produces a distinct message:
 
-```
+```text
 StorymockError [InvalidTraitError]:
   Trait 'vip' is not defined on this schema.
 
@@ -202,7 +202,7 @@ StorymockError [InvalidTraitError]:
     schema.trait('vip', { ... })
 ```
 
-```
+```text
 StorymockError [InvalidTraitError]:
   Trait 'bad' overrides field 'email', which does not exist on the schema type.
 
@@ -211,7 +211,7 @@ StorymockError [InvalidTraitError]:
   Remove the unknown field from the trait definition.
 ```
 
-```
+```text
 StorymockError [InvalidTraitError]:
   Trait 'wrong' — type mismatch on field 'age'.
 
@@ -237,7 +237,7 @@ story()
 
 This is caught at definition time — no `.create()` needed:
 
-```
+```text
 StorymockError [DuplicateNameError]:
   Story already has an entry named 'user'.
 
@@ -273,7 +273,7 @@ story()
 
 The error identifies the broken reference and lists available entries:
 
-```
+```text
 StorymockError [UnknownRefError]:
   ref('user') — no entry named 'user' exists in this story.
 
@@ -288,7 +288,7 @@ StorymockError [UnknownRefError]:
 
 If the entry exists but has no resolvable identity:
 
-```
+```text
 StorymockError [UnknownRefError]:
   ref('user') — entry 'user' has no resolvable identity.
 
@@ -325,7 +325,7 @@ story()
   .create();                      // IndexOutOfBoundsError
 ```
 
-```
+```text
 StorymockError [IndexOutOfBoundsError]:
   items[5] is out of bounds — 'items' has 3 entries (indices 0–2).
 

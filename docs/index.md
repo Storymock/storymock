@@ -13,7 +13,7 @@ hero:
       text: API Reference
       link: /reference/
     - theme: alt
-      text: ⚡ Try in StackBlitz
+      text: ⚡️ Try in StackBlitz
       link: https://stackblitz.com/github/storymock/storymock/tree/main
 
 features:
@@ -32,7 +32,7 @@ features:
   - icon: ♻️
     title: Reuse without risk
     details: "Immutable builders. Derive as many variants as you need — no shared state between tests."
-  - icon: ⚡
+  - icon: ⚡️
     title: Works with what you already use
     details: "Powered by faker.js out of the box. Swap the engine or add your own data types when needed."
 ---

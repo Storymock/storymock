@@ -2,7 +2,7 @@
 
 storymock has three layers. Each builds on the one below:
 
-```
+```text
   ┌─────────────────────────────────────────┐
   │  Story                                  │
   │  Composes schemas, wires relationships  │

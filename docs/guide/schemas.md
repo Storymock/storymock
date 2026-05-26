@@ -268,7 +268,7 @@ Fields form a **directed acyclic graph** (DAG) based on their dependencies. stor
 2. **`when()` fields** — resolved after the field they depend on
 3. **`derive()` fields** — resolved last, after everything else
 
-```
+```text
 // CouponSchema resolution order:
 // 1. type       (no deps)
 // 2. status     (no deps)
