@@ -17,7 +17,7 @@
   gap: 8px;
   justify-content: center;
   flex-wrap: wrap;
-  margin: 2rem 0 2.5rem;
+  margin: 4rem 0 2.5rem;
 }
 
 .badge-bar a {
