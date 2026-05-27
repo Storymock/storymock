@@ -1,5 +1,5 @@
 <template>
-  <div class="badge-bar">
+  <nav class="badge-bar" aria-label="Project badges">
     <a href="https://www.npmjs.com/package/storymock" target="_blank" rel="noopener">
       <img src="https://img.shields.io/npm/v/storymock?color=7c3aed&label=npm" alt="npm version" />
     </a>
@@ -8,21 +8,21 @@
     <a href="https://bundlephobia.com/package/storymock" target="_blank" rel="noopener">
       <img src="https://img.shields.io/bundlephobia/minzip/storymock?color=7c3aed&label=bundle" alt="Bundle size" />
     </a>
-  </div>
+  </nav>
 </template>
 
 <style scoped>
 .badge-bar {
   display: flex;
-  gap: 8px;
+  gap: var(--sm-space-3);
   justify-content: center;
   flex-wrap: wrap;
-  margin: 4rem 0 2.5rem;
+  margin: var(--sm-space-11) 0 var(--sm-space-9);
 }
 
 .badge-bar a {
-  line-height: 0;
-  transition: opacity 0.15s ease;
+  display: inline-flex;
+  transition: opacity var(--sm-duration) var(--sm-easing);
 }
 
 .badge-bar a:hover {
@@ -30,7 +30,7 @@
 }
 
 .badge-bar img {
-  height: 22px;
-  border-radius: 4px;
+  height: 1.375rem;
+  border-radius: var(--sm-radius-sm);
 }
 </style>

@@ -8,19 +8,19 @@ defineProps<{
   <div class="versus">
     <div class="versus-block versus-other-block">
       <div class="versus-header other-header">
-        <span class="versus-icon">○</span>
+        <span class="versus-icon" aria-hidden="true">○</span>
         {{ other || 'Other' }}
       </div>
       <div class="versus-content">
         <slot name="other" />
       </div>
     </div>
-    <div class="versus-divider">
+    <div class="versus-divider" aria-hidden="true">
       <span>vs</span>
     </div>
     <div class="versus-block versus-storymock-block">
       <div class="versus-header storymock-header">
-        <span class="versus-icon">◆</span>
+        <span class="versus-icon" aria-hidden="true">◆</span>
         storymock
       </div>
       <div class="versus-content">
@@ -32,8 +32,8 @@ defineProps<{
 
 <style scoped>
 .versus {
-  margin: 1.5rem 0 2rem;
-  border-radius: 12px;
+  margin: var(--sm-space-9) 0;
+  border-radius: var(--sm-radius-lg);
   overflow: hidden;
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg);
@@ -42,9 +42,9 @@ defineProps<{
 .versus-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  font-size: 13px;
+  gap: var(--sm-space-3);
+  padding: var(--sm-space-4) var(--sm-space-7);
+  font-size: var(--sm-text-base);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -63,12 +63,12 @@ defineProps<{
 }
 
 .versus-icon {
-  font-size: 10px;
+  font-size: var(--sm-text-xs);
 }
 
 .versus-other-block {
   opacity: 0.75;
-  transition: opacity 0.2s ease;
+  transition: opacity var(--sm-duration) var(--sm-easing);
 }
 
 .versus:hover .versus-other-block {
@@ -79,7 +79,7 @@ defineProps<{
   border-left: 3px solid var(--vp-c-brand-1);
 }
 
-.versus-content :deep(div[class*="language-"]) {
+.versus-content :deep(div[class*='language-']) {
   border-radius: 0;
   margin: 0;
   border: none;
@@ -91,29 +91,29 @@ defineProps<{
 }
 
 .versus-content :deep(button.copy) {
-  top: 8px;
-  right: 8px;
+  top: var(--sm-space-3);
+  right: var(--sm-space-3);
 }
 
 .versus-divider {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 28px;
+  height: 1.75rem;
   background: var(--vp-c-bg-soft);
   border-top: 1px solid var(--vp-c-divider);
   border-bottom: 1px solid var(--vp-c-divider);
 }
 
 .versus-divider span {
-  font-size: 10px;
+  font-size: var(--sm-text-xs);
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--vp-c-text-3);
   background: var(--vp-c-bg-alt);
-  padding: 2px 14px;
-  border-radius: 10px;
+  padding: var(--sm-space-0) 0.875rem;
+  border-radius: var(--sm-radius-md);
   border: 1px solid var(--vp-c-divider);
 }
 </style>

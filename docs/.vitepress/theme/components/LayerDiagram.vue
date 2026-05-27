@@ -1,50 +1,50 @@
 <template>
   <div class="layer-diagram">
-    <div class="layer faker-layer">
-      <div class="layer-top">
+    <div class="layer">
+      <div class="layer-header">
         <span class="layer-name">Faker</span>
         <span class="layer-desc">Generate a single value</span>
       </div>
-      <div class="layer-code">
+      <p class="layer-code">
         <code>numeric().min(1).max(100) · person().fullName() · text().uuid()</code>
-      </div>
-      <div class="layer-methods">.min() · .max() · .precision() · .not() · .unique()</div>
+      </p>
+      <p class="layer-methods">.min() · .max() · .precision() · .not() · .unique()</p>
     </div>
 
-    <div class="connector">
+    <div class="connector" aria-hidden="true">
       <div class="connector-line" />
       <div class="connector-dot dot-1" />
       <div class="connector-dot dot-2" />
       <div class="connector-dot dot-3" />
     </div>
 
-    <div class="layer schema-layer">
-      <div class="layer-top">
+    <div class="layer">
+      <div class="layer-header">
         <span class="layer-name">Schema</span>
         <span class="layer-desc">Map fields to fakers, define named states</span>
       </div>
-      <div class="layer-code">
+      <p class="layer-code">
         <code>schema&lt;User&gt;({ id: text().uuid(), name: person().fullName() }).trait('admin', { ... })</code>
-      </div>
-      <div class="layer-methods">.trait() · when() · derive() · .id()</div>
+      </p>
+      <p class="layer-methods">.trait() · when() · derive() · .id()</p>
     </div>
 
-    <div class="connector">
+    <div class="connector" aria-hidden="true">
       <div class="connector-line" />
       <div class="connector-dot dot-1" />
       <div class="connector-dot dot-2" />
       <div class="connector-dot dot-3" />
     </div>
 
-    <div class="layer story-layer">
-      <div class="layer-top">
+    <div class="layer">
+      <div class="layer-header">
         <span class="layer-name">Story</span>
         <span class="layer-desc">Compose schemas, wire relationships</span>
       </div>
-      <div class="layer-code">
+      <p class="layer-code">
         <code>story().add('user', UserSchema).add('order', OrderSchema, { userId: ref('user') })</code>
-      </div>
-      <div class="layer-methods">ref() · .setup() · .with() · .addMany()</div>
+      </p>
+      <p class="layer-methods">ref() · .setup() · .with() · .addMany()</p>
     </div>
   </div>
 </template>
@@ -54,68 +54,67 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 2rem auto;
+  margin: var(--sm-space-9) auto;
   max-width: 640px;
 }
 
 .layer {
   width: 100%;
-  padding: 20px 24px;
-  border-radius: 12px;
+  padding: var(--sm-space-7) var(--sm-space-8);
+  border-radius: var(--sm-radius-lg);
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-soft);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform var(--sm-duration) var(--sm-easing), box-shadow var(--sm-duration) var(--sm-easing);
 }
 
 .layer:hover {
   transform: scale(1.015);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
-}
-.dark .layer:hover {
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--sm-shadow-sm);
 }
 
-.layer-top {
+.layer-header {
   display: flex;
   align-items: baseline;
-  gap: 12px;
-  margin-bottom: 8px;
+  gap: var(--sm-space-5);
+  margin-bottom: var(--sm-space-3);
 }
 
 .layer-name {
-  font-size: 18px;
+  font-size: var(--sm-text-xl);
   font-weight: 700;
   color: var(--vp-c-brand-1);
 }
 
 .layer-desc {
-  font-size: 14px;
+  font-size: var(--sm-text-md);
   color: var(--vp-c-text-2);
 }
 
 .layer-code {
   font-family: var(--vp-font-family-mono);
-  font-size: 12px;
+  font-size: var(--sm-text-sm);
   color: var(--vp-c-text-3);
-  margin-bottom: 10px;
+  margin: 0 0 var(--sm-space-3);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .layer-methods {
-  font-size: 12px;
+  font-size: var(--sm-text-sm);
   font-weight: 600;
   color: var(--vp-c-text-3);
   letter-spacing: 0.02em;
+  margin: 0;
 }
 
 /* Connectors with animated dots */
+
 .connector {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 36px;
+  height: 2.25rem;
   position: relative;
   width: 2px;
 }
@@ -143,32 +142,24 @@
 .dot-3 { animation-delay: 1.4s; }
 
 @keyframes dot-flow {
-  0% {
-    top: 0;
-    opacity: 0;
-  }
-  15% {
-    opacity: 1;
-  }
-  85% {
-    opacity: 1;
-  }
-  100% {
-    top: 100%;
-    opacity: 0;
-  }
+  0% { top: 0; opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
 }
 
 @media (max-width: 640px) {
   .layer {
-    padding: 16px;
+    padding: var(--sm-space-6);
   }
-  .layer-top {
+
+  .layer-header {
     flex-direction: column;
-    gap: 2px;
+    gap: var(--sm-space-0);
   }
+
   .layer-code {
-    font-size: 11px;
+    font-size: 0.6875rem;
   }
 }
 </style>

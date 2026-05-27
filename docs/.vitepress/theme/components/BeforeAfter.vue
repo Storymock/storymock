@@ -1,50 +1,55 @@
 <template>
-  <div class="comparison">
-    <div class="comparison-panel without-panel">
-      <div class="comparison-label">Without storymock</div>
-      <div class="comparison-code">
-        <slot name="without" />
+  <div class="before-after">
+    <div class="comparison">
+      <div class="comparison-panel without-panel">
+        <p class="comparison-label">Without storymock</p>
+        <div class="comparison-code">
+          <slot name="without" />
+        </div>
+      </div>
+      <div class="comparison-panel with-panel">
+        <p class="comparison-label">With storymock</p>
+        <div class="comparison-code">
+          <slot name="with" />
+        </div>
       </div>
     </div>
-    <div class="comparison-panel with-panel">
-      <div class="comparison-label">With storymock</div>
-      <div class="comparison-code">
-        <slot name="with" />
-      </div>
-    </div>
-  </div>
 
-  <div class="callouts">
-    <div class="callout">
-      <span class="callout-icon">🏷️</span>
-      <div>
-        <strong>Named states, not ad-hoc overrides</strong>
-        <p>Define <code>'expiredAdmin'</code> or <code>'premium'</code> once. Apply by name — no copy-pasting field values.</p>
-      </div>
-    </div>
-    <div class="callout">
-      <span class="callout-icon">🎲</span>
-      <div>
-        <strong>Realistic data without reinventing fakers</strong>
-        <p><code>person().fullName()</code>, <code>temporal().past()</code>, <code>finance().amount().precision(2)</code> — built-in and composable.</p>
-      </div>
-    </div>
-    <div class="callout">
-      <span class="callout-icon">🔗</span>
-      <div>
-        <strong>Complex relationships in one call</strong>
-        <p><code>ref()</code> wires foreign keys. <code>.setup()</code> distributes members. One <code>.create()</code> gives you the whole graph.</p>
-      </div>
-    </div>
+    <ul class="callouts">
+      <li class="callout">
+        <span class="callout-icon" aria-hidden="true">🏷️</span>
+        <div>
+          <strong>Named states, not ad-hoc overrides</strong>
+          <p>Define <code>'expiredAdmin'</code> or <code>'premium'</code> once. Apply by name — no copy-pasting field values.</p>
+        </div>
+      </li>
+      <li class="callout">
+        <span class="callout-icon" aria-hidden="true">🎲</span>
+        <div>
+          <strong>Realistic data without reinventing fakers</strong>
+          <p><code>person().fullName()</code>, <code>temporal().past()</code>, <code>finance().amount().precision(2)</code> — built-in and composable.</p>
+        </div>
+      </li>
+      <li class="callout">
+        <span class="callout-icon" aria-hidden="true">🔗</span>
+        <div>
+          <strong>Complex relationships in one call</strong>
+          <p><code>ref()</code> wires foreign keys. <code>.setup()</code> distributes members. One <code>.create()</code> gives you the whole graph.</p>
+        </div>
+      </li>
+    </ul>
   </div>
 </template>
 
 <style scoped>
+.before-after {
+  margin: var(--sm-space-9) 0;
+}
+
 .comparison {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin: 1.5rem 0;
+  gap: var(--sm-space-7);
 }
 
 .comparison-panel {
@@ -62,9 +67,9 @@
 }
 
 .comparison-label {
-  padding-left: 16px;
-  margin-bottom: 8px;
-  font-size: 14px;
+  padding-left: var(--sm-space-6);
+  margin: 0 0 var(--sm-space-3);
+  font-size: var(--sm-text-md);
   font-weight: 600;
   color: var(--vp-c-text-2);
 }
@@ -73,13 +78,13 @@
   color: var(--vp-c-brand-1);
 }
 
-.comparison-code :deep(div[class*="language-"]) {
+.comparison-code :deep(div[class*='language-']) {
   margin: 0;
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 var(--sm-radius-md) var(--sm-radius-md) 0;
 }
 
 .comparison-code :deep(pre) {
-  padding: 16px 20px;
+  padding: var(--sm-space-6) var(--sm-space-7);
 }
 
 .comparison-code :deep(button.copy) {
@@ -87,46 +92,49 @@
 }
 
 /* Callouts */
+
 .callouts {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin: 1.5rem 0 0;
+  gap: var(--sm-space-6);
+  margin: var(--sm-space-8) 0 0;
+  padding: 0;
+  list-style: none;
 }
 
 .callout {
   display: flex;
-  gap: 12px;
-  padding: 16px;
-  border-radius: 10px;
+  gap: var(--sm-space-5);
+  padding: var(--sm-space-7);
+  border-radius: var(--sm-radius-lg);
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-soft);
 }
 
 .callout-icon {
-  font-size: 20px;
+  font-size: 1.25rem;
   flex-shrink: 0;
-  margin-top: 1px;
+  line-height: 1.4;
 }
 
 .callout strong {
   display: block;
-  font-size: 14px;
-  margin-bottom: 4px;
+  font-size: var(--sm-text-md);
+  margin-bottom: var(--sm-space-1);
   color: var(--vp-c-text-1);
 }
 
 .callout p {
-  font-size: 13px;
+  font-size: var(--sm-text-base);
   line-height: 1.5;
   color: var(--vp-c-text-2);
   margin: 0;
 }
 
 .callout code {
-  font-size: 12px;
-  padding: 1px 4px;
-  border-radius: 3px;
+  font-size: var(--sm-text-sm);
+  padding: 0.0625rem var(--sm-space-1);
+  border-radius: var(--sm-radius-sm);
   background: var(--vp-c-bg-mute);
   font-family: var(--vp-font-family-mono);
 }
@@ -135,6 +143,7 @@
   .comparison {
     grid-template-columns: 1fr;
   }
+
   .callouts {
     grid-template-columns: 1fr;
   }

@@ -134,6 +134,22 @@ function switchTab(id: 'faker' | 'schema' | 'story') {
   runCount.value = 0
 }
 
+function onTabKeydown(event: KeyboardEvent) {
+  const currentIndex = tabs.findIndex(t => t.id === activeTab.value)
+  let next = currentIndex
+
+  if (event.key === 'ArrowRight') next = (currentIndex + 1) % tabs.length
+  else if (event.key === 'ArrowLeft') next = (currentIndex - 1 + tabs.length) % tabs.length
+  else if (event.key === 'Home') next = 0
+  else if (event.key === 'End') next = tabs.length - 1
+  else return
+
+  event.preventDefault()
+  switchTab(tabs[next].id)
+  const tablist = (event.currentTarget as HTMLElement).parentElement
+  ;(tablist?.children[next] as HTMLElement)?.focus()
+}
+
 async function run() {
   isAnimating.value = true
   outputVisible.value = false
@@ -149,37 +165,50 @@ async function run() {
 <template>
   <div class="playground">
     <div class="playground-header">
-      <div class="playground-tabs">
+      <div class="playground-tabs" role="tablist" aria-label="Example type">
         <button
           v-for="tab in tabs"
           :key="tab.id"
+          role="tab"
+          :id="`playground-tab-${tab.id}`"
+          :aria-selected="activeTab === tab.id"
+          aria-controls="playground-panel"
+          :tabindex="activeTab === tab.id ? 0 : -1"
           :class="['tab-btn', { active: activeTab === tab.id }]"
           @click="switchTab(tab.id)"
+          @keydown="onTabKeydown"
         >
-          <span class="tab-icon">{{ tab.icon }}</span>
+          <span class="tab-icon" aria-hidden="true">{{ tab.icon }}</span>
           {{ tab.label }}
         </button>
       </div>
       <button
         class="run-btn"
         :class="{ running: isAnimating }"
-        @click="run"
         :disabled="isAnimating"
+        @click="run"
       >
-        <svg class="run-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l10-5.5z"/></svg>
+        <svg class="run-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M4 2.5v11l10-5.5z"/>
+        </svg>
         {{ outputVisible ? 'Re-run' : 'Run' }}
       </button>
     </div>
 
-    <div class="playground-body">
-      <div class="code-panel">
-        <div v-if="highlightedCode" class="code-block highlighted" v-html="highlightedCode"></div>
-        <pre v-else class="code-block"><code>{{ currentExample.code }}</code></pre>
+    <div
+      class="playground-body"
+      id="playground-panel"
+      role="tabpanel"
+      :aria-labelledby="`playground-tab-${activeTab}`"
+    >
+      <div class="code-container">
+        <div v-if="highlightedCode" v-html="highlightedCode" />
+        <pre v-else><code>{{ currentExample.code }}</code></pre>
       </div>
 
       <Transition name="output">
         <div v-if="outputVisible" class="output-panel" :key="runCount">
-          <div class="output-label">Example output</div>
+          <p class="output-label">Example output</p>
           <pre class="output-block"><code>{{ currentOutput }}</code></pre>
         </div>
       </Transition>
@@ -190,9 +219,9 @@ async function run() {
 <style scoped>
 .playground {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 12px;
+  border-radius: var(--sm-radius-lg);
   overflow: hidden;
-  margin: 1.5rem 0;
+  margin: var(--sm-space-9) 0;
   background: var(--vp-c-bg-soft);
 }
 
@@ -200,7 +229,7 @@ async function run() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 4px;
+  padding: 0 var(--sm-space-1);
   border-bottom: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg);
 }
@@ -212,16 +241,16 @@ async function run() {
 .tab-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 10px 16px;
+  gap: var(--sm-space-2);
+  padding: var(--sm-space-4) var(--sm-space-6);
   border: none;
   background: transparent;
   color: var(--vp-c-text-2);
-  font-size: 14px;
+  font-size: var(--sm-text-md);
   font-weight: 500;
   cursor: pointer;
   border-bottom: 2px solid transparent;
-  transition: all 0.2s ease;
+  transition: color var(--sm-duration) var(--sm-easing), border-color var(--sm-duration) var(--sm-easing);
   font-family: var(--vp-font-family-base);
 }
 
@@ -235,23 +264,23 @@ async function run() {
 }
 
 .tab-icon {
-  font-size: 16px;
+  font-size: var(--sm-text-lg);
 }
 
 .run-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 18px;
-  margin: 6px 8px;
+  gap: var(--sm-space-2);
+  padding: var(--sm-space-2) 1.125rem;
+  margin: var(--sm-space-2) var(--sm-space-3);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--sm-radius-md);
   background: var(--vp-c-brand-1);
   color: white;
-  font-size: 13px;
+  font-size: var(--sm-text-base);
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background var(--sm-duration) var(--sm-easing), transform var(--sm-duration) var(--sm-easing);
   font-family: var(--vp-font-family-base);
 }
 
@@ -266,8 +295,8 @@ async function run() {
 }
 
 .run-icon {
-  width: 12px;
-  height: 12px;
+  width: var(--sm-space-5);
+  height: var(--sm-space-5);
   flex-shrink: 0;
 }
 
@@ -276,56 +305,48 @@ async function run() {
   flex-direction: column;
 }
 
-.code-panel {
-  padding: 0;
-}
+/* Code container — handles both Shiki-highlighted and plain fallback */
 
-.code-block {
+.code-container :deep(pre),
+.code-container > pre {
   margin: 0;
-  padding: 20px 24px;
-  background: var(--vp-code-block-bg);
-  font-size: 13.5px;
+  padding: var(--sm-space-7) var(--sm-space-8);
+  background: var(--vp-code-block-bg) !important;
+  font-size: var(--sm-text-base);
   line-height: 1.7;
   overflow-x: auto;
   border-radius: 0;
 }
 
-.code-block code {
+.code-container > pre > code {
   font-family: var(--vp-font-family-mono);
   color: var(--vp-c-text-1);
 }
 
-.code-block.highlighted :deep(pre) {
-  margin: 0;
-  padding: 20px 24px;
-  background: var(--vp-code-block-bg) !important;
-  font-size: 13.5px;
-  line-height: 1.7;
-  overflow-x: auto;
-  border-radius: 0;
-}
-
-.code-block.highlighted :deep(code) {
+.code-container :deep(code) {
   font-family: var(--vp-font-family-mono);
 }
 
-.code-block.highlighted :deep(.shiki),
-.code-block.highlighted :deep(.shiki span) {
+.code-container :deep(.shiki),
+.code-container :deep(.shiki span) {
   color: var(--shiki-light);
 }
 
-.dark .code-block.highlighted :deep(.shiki),
-.dark .code-block.highlighted :deep(.shiki span) {
+.dark .code-container :deep(.shiki),
+.dark .code-container :deep(.shiki span) {
   color: var(--shiki-dark);
 }
+
+/* Output panel */
 
 .output-panel {
   border-top: 1px solid var(--vp-c-divider);
 }
 
 .output-label {
-  padding: 10px 24px 0;
-  font-size: 11px;
+  padding: var(--sm-space-4) var(--sm-space-8) 0;
+  margin: 0;
+  font-size: 0.6875rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -334,9 +355,9 @@ async function run() {
 
 .output-block {
   margin: 0;
-  padding: 10px 24px 20px;
+  padding: var(--sm-space-4) var(--sm-space-8) var(--sm-space-7);
   background: transparent;
-  font-size: 13.5px;
+  font-size: var(--sm-text-base);
   line-height: 1.7;
   color: var(--vp-c-brand-1);
   overflow-x: auto;
@@ -347,16 +368,20 @@ async function run() {
 }
 
 /* Output slide animation */
+
 .output-enter-active {
-  transition: all 0.3s ease-out;
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 }
+
 .output-leave-active {
-  transition: all 0.15s ease-in;
+  transition: opacity 0.15s ease-in;
 }
+
 .output-enter-from {
   opacity: 0;
-  transform: translateY(-8px);
+  transform: translateY(-0.5rem);
 }
+
 .output-leave-to {
   opacity: 0;
 }
@@ -364,28 +389,33 @@ async function run() {
 @media (max-width: 640px) {
   .playground-header {
     flex-direction: column;
-    gap: 0;
   }
+
   .playground-tabs {
     width: 100%;
   }
+
   .tab-btn {
     flex: 1;
     justify-content: center;
-    padding: 10px 8px;
-    font-size: 13px;
+    padding: var(--sm-space-4) var(--sm-space-3);
+    font-size: var(--sm-text-base);
   }
+
   .run-btn {
-    margin: 0 8px 8px;
+    margin: 0 var(--sm-space-3) var(--sm-space-3);
     align-self: flex-end;
   }
-  .code-block,
+
+  .code-container :deep(pre),
+  .code-container > pre,
   .output-block {
-    padding: 16px;
-    font-size: 12.5px;
+    padding: var(--sm-space-6);
+    font-size: var(--sm-text-base);
   }
+
   .output-label {
-    padding: 10px 16px 0;
+    padding: var(--sm-space-4) var(--sm-space-6) 0;
   }
 }
 </style>

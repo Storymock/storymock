@@ -114,23 +114,8 @@ orgStory.with('members[0]', 'admin').create();
 </template>
 </BeforeAfter>
 
-<div style="text-align: center; margin: 2rem 0 3rem;">
-  <a href="/guide/" class="action-link">Get started →</a>
-  &nbsp;&nbsp;·&nbsp;&nbsp;
-  <a href="/why" class="action-link secondary">Why storymock?</a>
-</div>
-
-<style>
-.action-link {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--vp-c-brand-1);
-  text-decoration: none;
-}
-.action-link:hover {
-  text-decoration: underline;
-}
-.action-link.secondary {
-  color: var(--vp-c-text-2);
-}
-</style>
+<nav class="home-actions" aria-label="Quick links">
+  <a href="/guide/">Get started →</a>
+  <span class="separator" aria-hidden="true">·</span>
+  <a href="/why" class="secondary">Why storymock?</a>
+</nav>
