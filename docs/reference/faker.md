@@ -230,23 +230,34 @@ Creates a `TemporalFaker`. Default: random date in range `[10 years ago, 10 year
 
 Implements mixins: `Bounded<Date>`, `Excludable<Date>`, `Nullable`, `Seedable`.
 
-#### Relative Methods
+All relative methods accept a `unit: 'days' | 'weeks' | 'months' | 'years'` — always explicit, never implicit.
 
-- `.today()` — Today (time zeroed).
-- `.yesterday()` — Yesterday.
-- `.tomorrow()` — Tomorrow.
-- `.past(years?)` — Random past date (default: 1yr).
-- `.future(years?)` — Random future date (default: 1yr).
-- `.recent(days?)` — Recent past (default: 1 day).
-- `.soon(days?)` — Near future (default: 1 day).
-- `.daysAgo(n)` — Exactly N days ago.
-- `.daysFromNow(n)` — Exactly N days ahead.
-- `.weeksAgo(n)` — N weeks ago.
-- `.weeksFromNow(n)` — N weeks ahead.
-- `.monthsAgo(n)` — N months ago.
-- `.monthsFromNow(n)` — N months ahead.
-- `.yearsAgo(n)` — N years ago.
-- `.yearsFromNow(n)` — N years ahead.
+#### Range (random within window)
+
+- `.past(n, unit)` — Random date in `[now − n*unit, now]`. Example: `temporal().past(3, 'months')`.
+- `.future(n, unit)` — Random date in `[now, now + n*unit]`. Example: `temporal().future(30, 'days')`.
+
+Both arguments are required. `n` also accepts a `Faker<number>`.
+
+#### Exact Offset
+
+- `.ago(n, unit)` — Specific point: now − n*unit. Example: `temporal().ago(7, 'days')`.
+- `.fromNow(n, unit)` — Specific point: now + n*unit. Example: `temporal().fromNow(2, 'weeks')`.
+
+Both arguments are required. `n` also accepts a `Faker<number>`.
+
+#### Calendar
+
+- `.today()` — Today (time zeroed to midnight).
+- `.yesterday()` — Yesterday (time zeroed).
+- `.tomorrow()` — Tomorrow (time zeroed).
+
+#### Convenience
+
+- `.recent()` — Random date in the recent past (default: within 2 days). Window configurable via `configure()`.
+- `.soon()` — Random date in the near future (default: within 2 days). Window configurable via `configure()`.
+
+These take no arguments. For a custom window, use `.past(n, unit)` / `.future(n, unit)`.
 
 #### Absolute Methods
 
@@ -533,7 +544,6 @@ See [Errors Reference](/guide/errors) for all errors. Key errors relevant to fak
 
 - **`ContradictoryConstraintError`** — Thrown when constraints make it impossible to generate a value (e.g. `.min(10).max(5)`, or `.unique().create(n)` when fewer than `n` unique values can be produced).
 - **`UnsupportedProviderError`** — Thrown when a semantic method is called but the configured provider lacks the required module.
-- **`IndexOutOfBoundsError`** — Thrown when `.with('items[n]', ...)` on a story targets an index that exceeds the `addMany` count.
 
 ---
 
@@ -565,7 +575,7 @@ pokemon().level().min(50).create();   // 73
 ```
 
 ::: info Full example
-[`examples/fakers-and-composability.ts`](https://storymock.dev/examples#fakers-composability)
+[`examples/fakers-and-composability.ts`](/examples#fakers-composability)
 :::
 
 ### 7.2 Custom Providers

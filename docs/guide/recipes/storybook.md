@@ -25,7 +25,7 @@ export const UserCardPropsSchema = schema<UserCardProps>({
   name: person().fullName(),
   avatar: text().template('https://i.pravatar.cc/150?u={{uuid}}'),
   role: choice('viewer', 'editor', 'admin'),
-  joinedAt: temporal().past(3),
+  joinedAt: temporal().past(3, 'years'),
   bio: lorem().sentence(),
   postCount: numeric().min(0).max(500),
 })

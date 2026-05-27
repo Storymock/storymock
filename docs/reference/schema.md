@@ -43,7 +43,7 @@ const UserSchema = schema<User>({
   id: text().uuid(),
   name: person().fullName(),
   age: person().age().min(18).max(80),
-  birthdate: temporal().past(50),
+  birthdate: temporal().past(50, 'years'),
   status: choice('active', 'inactive'),
   tags: collection(lorem().word()).maxLength(3),
 });
@@ -120,7 +120,7 @@ Traits are named, reusable sets of field overrides. They represent a specific **
 ```typescript
 const UserSchema = schema<User>({ /* base definition */ })
   .trait('birthday', {
-    birthdate: temporal().today().yearsAgo(numeric().min(18).max(80)),
+    birthdate: temporal().ago(numeric().min(18).max(80), 'years'),
   })
   .trait('inactive', {
     status: 'inactive' as const,
@@ -130,7 +130,7 @@ const UserSchema = schema<User>({ /* base definition */ })
   })
   .trait('young', {
     age: numeric().min(18).max(25),
-    birthdate: temporal().yearsAgo(numeric().min(18).max(25)),
+    birthdate: temporal().ago(numeric().min(18).max(25), 'years'),
   });
 ```
 
@@ -208,114 +208,49 @@ For `.with()` on stories, see [Story API — .with()](/reference/story#_2-custom
 
 ## 5. Conditional Logic: `when()`
 
-`when()` selects a faker based on the resolved value of a sibling field. It creates an implicit dependency edge in the resolution graph (see §7). The case map supports string, number, and boolean keys.
+`when()` selects a faker based on the resolved value of a sibling field. It creates an implicit dependency edge in the resolution graph (see §7).
 
-### String Matching
-
-```typescript
-import { schema, when, numeric, temporal, choice } from 'storymock';
-
-interface Coupon {
-  type: 'percentage' | 'fixed';
-  status: 'expired' | 'redeemed' | 'available';
-  price: number;
-  expiration: Date;
-}
-
-const CouponSchema = schema<Coupon>({
-  type: choice('percentage', 'fixed'),
-  status: choice('expired', 'redeemed', 'available'),
-
-  price: when('type', {
-    percentage: numeric().min(5).max(100),
-    fixed: numeric().min(10).max(200).precision(2),
-  }),
-
-  expiration: when('status', {
-    expired: temporal().past(),
-    _: temporal().future(),       // '_' is the default/else case
-  }),
-});
-```
-
-Each key is a possible value of the matched field. `_` is the default/else case.
-
-::: info Full example
-[`examples/conditional-fields.ts`](https://storymock.dev/examples#conditional-fields)
-:::
-
-### Numeric Matching
+### Signature
 
 ```typescript
-interface Order {
-  quantity: number;
-  discount: number;
-}
-
-const OrderSchema = schema<Order>({
-  quantity: choice(1, 5, 10),
-
-  discount: when('quantity', {
-    1: 0,
-    5: numeric().min(5).max(10).precision(2),
-    _: numeric().min(10).max(25).precision(2),
-  }),
-});
-```
-
-Numeric keys in the case map are matched against the resolved value of the field.
-
-### Boolean Matching
-
-```typescript
-interface Feature {
-  isActive: boolean;
-  label: string;
-}
-
-const FeatureSchema = schema<Feature>({
-  isActive: choice(true, false),
-
-  label: when('isActive', {
-    true: 'Enabled',
-    false: 'Disabled',
-  }),
-});
+function when<T, K extends keyof T, R>(
+  field: K,
+  cases: Record<string, R | Faker<R>> & { _?: R | Faker<R> },
+): When<T, R>;
 ```
 
 ### Rules
 
-- The matched field must resolve **before** the dependent field
 - Cases can be fakers or literal values
-- `_` is the default case — used when no other case matches
-- If no case matches and no `_` is provided, `MissingCaseError` is thrown at `.create()` time
-- For complex conditional logic on any field type, use `derive()` instead
+- Supports string, number, and boolean discriminants
+- `_` is the default/else case — used when no other key matches
+- The matched field must resolve **before** the dependent field
+
+```typescript
+price: when('type', {
+  percentage: numeric().min(5).max(100),
+  fixed: numeric().min(10).max(200).precision(2),
+}),
+
+expiration: when('status', {
+  expired: temporal().past(1, 'years'),
+  _: temporal().future(1, 'years'),       // default case
+}),
+```
+
+See [Working with Schemas — Conditional Fields](/guide/schemas#conditional-fields-when) for full examples with string, numeric, and boolean matching.
 
 ### Throws
 
-- `MissingCaseError` — thrown at `.create()` time when the resolved value of the matched field does not match any case key and no `_` default is provided. See [errors](/guide/errors) for details.
+- `MissingCaseError` — thrown at `.create()` time when no case matches and no `_` default is provided. See [Errors](/guide/errors#missingcaseerror).
 
 ---
 
 ## 6. Computed Fields: `derive()`
 
-`derive()` computes a field's value from resolved sibling fields. It's the escape hatch for logic that doesn't fit `when()`.
+`derive()` computes a field from resolved sibling values.
 
-```typescript
-import { schema, derive, choice, numeric, food } from 'storymock';
-
-const CouponSchema = schema<Coupon>({
-  type: choice('percentage', 'fixed'),
-  price: numeric().min(5).max(100),
-
-  title: derive(({ type, price }) => {
-    const suffix = type === 'percentage' ? '%' : ' USD';
-    return `${price}${suffix} OFF ${food().dish().create()}`;
-  }),
-});
-```
-
-### Type Signature
+### Signature
 
 ```typescript
 function derive<T, R>(
@@ -326,9 +261,16 @@ function derive<T, R>(
 ### Rules
 
 - The callback receives a `Partial<T>` of all fields resolved so far
-- The callback can return a literal value **or** a faker (which will be `.create()`'d automatically)
-- `derive()` fields resolve **after** all non-derived fields (MVP behavior)
-- Future: Proxy-based dependency tracking will enable `derive()` → `derive()` chains
+- Can return a literal value **or** a faker (which will be `.create()`'d automatically)
+- `derive()` fields resolve **after** all non-derived fields
+
+```typescript
+title: derive(({ type, price }) =>
+  type === 'percentage' ? `${price}% OFF` : `$${price} OFF`
+),
+```
+
+See [Working with Schemas — Computed Fields](/guide/schemas#computed-fields-derive) for full examples.
 
 ---
 
@@ -336,29 +278,22 @@ function derive<T, R>(
 
 Fields form a **directed acyclic graph** (DAG) based on their dependencies:
 
-- Plain fakers and literals have no dependencies — resolved first
-- `when('fieldA', ...)` creates an edge: `fieldA → this field`
-- `derive()` fields resolve after all non-derived fields (MVP)
-
-### Resolution Order
-
-1. **Definition time:** Analyze `when()` calls to build the dependency graph
+1. **Definition time:** `when()` calls build the dependency graph
 2. **Definition time:** Topological sort — throw `CircularDependencyError` if a cycle exists
-3. **Create time:** Resolve fields in topological order, passing results to dependents
+3. **Create time:** Resolve fields in topological order
 4. **Create time:** Resolve all `derive()` fields last
 
-```text
-// Example for CouponSchema:
-// 1. type       (no deps)
-// 2. status     (no deps)
-// 3. price      (depends on type via when())
-// 4. expiration (depends on status via when())
-// 5. title      (derive — resolves last, receives type + price)
-```
+| Field type | Resolution order | Dependencies |
+|---|---|---|
+| Plain faker / literal | First | None |
+| `when()` field | After its dependency | The matched sibling |
+| `derive()` field | Last | All non-derived fields |
+
+See [Working with Schemas — How Fields Resolve](/guide/schemas#how-fields-resolve) for a detailed walkthrough.
 
 ### Throws
 
-- `CircularDependencyError` — thrown at definition time when `when()` edges form a cycle in the dependency graph. See [errors](/guide/errors) for details.
+- `CircularDependencyError` — thrown at definition time when `when()` edges form a cycle. See [Errors](/guide/errors#circulardependencyerror).
 
 ---
 

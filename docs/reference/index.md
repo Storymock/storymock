@@ -14,7 +14,7 @@ Compact cheat sheet for storymock's API surface. See the full guide for detailed
 // Values
 numeric().min(1).max(100).create()          // 42
 text().uuid().create()                       // '550e8400-...'
-temporal().past(5).create()                  // 2023-11-14T08:33:12Z
+temporal().past(5, 'years').create()          // 2023-11-14T08:33:12Z
 bool().probability(0.8).create()             // 80% true
 choice('a', 'b', 'c').create()              // 'b'
 collection(numeric()).length(3).create()     // [7, 42, 13]
@@ -52,7 +52,7 @@ choice('a','b','c').unique().create(2)       // ['c', 'a']
 - Pattern: `.regex()` `.template()`
 
 **[`temporal()`](/reference/domains/temporal)**
-- Relative: `.past()` `.future()` `.recent()` `.soon()` `.today()` `.daysAgo()` `.yearsAgo()` etc.
+- Relative: `.past(n, unit)` `.future(n, unit)` `.ago(n, unit)` `.fromNow(n, unit)` `.recent()` `.soon()` `.today()` `.yesterday()` `.tomorrow()`
 - Absolute: `.year()` `.month()` `.day()` `.weekday()`
 - Range: `.between()` `.before()` `.after()` `.thisMonth()` `.lastYear()` etc.
 - Format: `.iso()` `.timestamp()` `.format()`
@@ -67,15 +67,23 @@ choice('a','b','c').unique().create(2)       // ['c', 'a']
 
 ## Semantic Domains
 
-- [`person()`](/reference/domains/person) — `.firstName()` `.lastName()` `.fullName()` `.gender()` `.age()` `.birthdate()` `.jobTitle()` `.bio()`
-- [`internet()`](/reference/domains/internet) — `.email()` `.username()` `.url()` `.ip()` `.ipv6()` `.port()` `.userAgent()` `.domainName()` `.password()`
-- [`location()`](/reference/domains/location) — `.city()` `.country()` `.state()` `.zipCode()` `.latitude()` `.longitude()` `.streetAddress()`
-- [`finance()`](/reference/domains/finance) — `.currency()` `.currencyCode()` `.accountNumber()` `.iban()` `.bic()` `.creditCard()`
-- [`lorem()`](/reference/domains/lorem) — `.word()` `.words()` `.sentence()` `.sentences()` `.paragraph()` `.paragraphs()`
-- [`image()`](/reference/domains/image) — `.avatar()` `.url()` `.dataUri()` `.placeholder()`
+- `person()` — `.firstName()` `.lastName()` `.fullName()` `.gender()` `.age()` `.birthdate()` `.jobTitle()` `.bio()`
+- `internet()` — `.email()` `.username()` `.url()` `.ip()` `.ipv6()` `.port()` `.userAgent()` `.domainName()` `.password()`
+- `location()` — `.city()` `.country()` `.state()` `.zipCode()` `.latitude()` `.longitude()` `.streetAddress()`
+- `commerce()` — `.product()` `.productName()` `.productDescription()` `.department()` `.isbn()`
+- `finance()` — `.amount()` `.currency()` `.currencyCode()` `.accountNumber()` `.iban()` `.bic()` `.creditCard()`
+- `company()` — `.name()` `.catchPhrase()` `.buzzPhrase()`
+- `lorem()` — `.word()` `.words()` `.sentence()` `.sentences()` `.paragraph()` `.paragraphs()`
+- `food()` — `.dish()` `.ingredient()` `.fruit()` `.vegetable()` `.meat()` `.spice()`
+- `system()` — `.fileName()` `.fileExt()` `.filePath()` `.mimeType()` `.semver()` `.cron()`
+- `image()` — `.avatar()` `.url()` `.dataUri()` `.placeholder()`
 - `phone()` — `.number()` `.imei()`
-- [`company()`](/reference/domains/company) — `.name()` `.catchPhrase()` `.buzzPhrase()`
 - `color()` — `.hex()` `.rgb()` `.hsl()` `.human()`
+- `git()` — `.commitSha()` `.commitMessage()` `.branch()`
+- `vehicle()` — `.name()` `.manufacturer()` `.vin()` `.licensePlate()`
+- `music()` — `.genre()` `.songName()` `.artist()` `.album()`
+- `animal()` — `.type()` `.cat()` `.dog()` `.bird()`
+- `airline()` — `.name()` `.airport()` `.flightNumber()` `.seat()`
 
 ---
 

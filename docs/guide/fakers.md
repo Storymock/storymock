@@ -127,30 +127,50 @@ text().template('user-{{uuid}}').create();          // 'user-550e8400-...'
 
 `temporal()` generates `Date` objects. By default it picks a random date within ±10 years of now.
 
-### Relative methods
+### Random within a window
 
-Position dates relative to the current moment:
-
-```typescript
-temporal().past().create();                // 2025-09-14T08:23:41Z — within the last year
-temporal().past(5).create();               // 2022-03-07T19:45:02Z — within the last 5 years
-temporal().future(2).create();             // 2027-11-22T14:05:47Z — within the next 2 years
-temporal().recent().create();              // 2026-05-25T21:17:33Z — within the last day
-temporal().soon().create();               // 2026-05-27T03:42:18Z — within the next day
-temporal().today().create();               // 2026-05-26T00:00:00Z — time zeroed
-temporal().yesterday().create();           // 2026-05-25T00:00:00Z
-temporal().tomorrow().create();            // 2026-05-27T00:00:00Z
-```
-
-For exact offsets:
+`.past(n, unit)` and `.future(n, unit)` generate a **random** date within a window around now. Both arguments are required — the unit is always explicit.
 
 ```typescript
-temporal().daysAgo(7).create();            // 2026-05-19T10:33:14Z
-temporal().weeksAgo(2).create();           // 2026-05-12T16:08:51Z
-temporal().monthsAgo(3).create();          // 2026-02-26T04:55:29Z
-temporal().yearsAgo(1).create();           // 2025-05-26T22:41:07Z
-temporal().daysFromNow(30).create();       // 2026-06-25T13:19:44Z
+temporal().past(1, 'years').create();      // 2025-09-14T08:23:41Z — random within the last year
+temporal().past(5, 'years').create();      // 2022-03-07T19:45:02Z — random within the last 5 years
+temporal().past(7, 'days').create();       // 2026-05-22T14:07:33Z — random within the last week
+temporal().future(2, 'years').create();    // 2027-11-22T14:05:47Z — random within the next 2 years
+temporal().future(30, 'days').create();    // 2026-06-18T03:28:55Z — random within the next 30 days
 ```
+
+### Exact offsets
+
+`.ago(n, unit)` and `.fromNow(n, unit)` produce a **specific point** in time:
+
+```typescript
+temporal().ago(7, 'days').create();        // 2026-05-20T10:33:14Z — exactly 7 days ago
+temporal().ago(2, 'weeks').create();       // 2026-05-13T16:08:51Z
+temporal().ago(3, 'months').create();      // 2026-02-27T04:55:29Z
+temporal().ago(1, 'years').create();       // 2025-05-27T22:41:07Z
+temporal().fromNow(30, 'days').create();   // 2026-06-26T13:19:44Z — exactly 30 days from now
+```
+
+### Calendar dates
+
+Fixed dates with time zeroed to midnight:
+
+```typescript
+temporal().today().create();               // 2026-05-27T00:00:00Z
+temporal().yesterday().create();           // 2026-05-26T00:00:00Z
+temporal().tomorrow().create();            // 2026-05-28T00:00:00Z
+```
+
+### Convenience
+
+`.recent()` and `.soon()` are zero-argument shorthands for near dates. By default, both use a 2-day window:
+
+```typescript
+temporal().recent().create();              // 2026-05-25T21:17:33Z — within the last 2 days
+temporal().soon().create();                // 2026-05-29T03:42:18Z — within the next 2 days
+```
+
+The window is configurable via `configure()` — see [Configuration](/guide/configuration#defaults-reference). For a specific window, use `.past(n, unit)` or `.future(n, unit)` instead.
 
 ### Absolute methods
 
@@ -185,8 +205,8 @@ temporal().lastYear().create();             // 2025-02-19T16:08:33Z
 Like `numeric()`, format methods change the return type:
 
 ```typescript
-temporal().today().iso().create();          // '2026-05-26T00:00:00.000Z'
-temporal().past().timestamp().create();     // 1716700800000
+temporal().today().iso().create();          // '2026-05-27T00:00:00.000Z'
+temporal().past(1, 'years').timestamp().create();  // 1716700800000
 temporal().format('YYYY-MM-DD').create();   // '2025-03-14'
 ```
 
@@ -305,8 +325,8 @@ Fakers can accept other fakers as arguments. The inner faker is resolved at `.cr
 // Random date in a randomly chosen year
 temporal().year(numeric().min(2020).max(2025)).create();  // 2021-08-03T22:14:37Z
 
-// Person born 18–80 years ago
-temporal().yearsAgo(numeric().min(18).max(80)).create();  // 1971-02-08T16:45:23Z
+// Person born exactly 18–80 years ago
+temporal().ago(numeric().min(18).max(80), 'years').create();  // 1971-02-08T16:45:23Z
 ```
 
 This keeps everything lazy — the inner `numeric()` isn't evaluated when you build the chain. It's resolved fresh each time `.create()` runs, so every call can produce a different year.

@@ -21,7 +21,7 @@ configure({
   defaults: {
     numeric: { min: 0, max: 1000, type: 'int' },
     text: { minLength: 1, maxLength: 20, charset: 'alphanumeric' },
-    temporal: { min: '-10 years', max: '+10 years' },
+    temporal: { min: '-10 years', max: '+10 years', recent: 2, soon: 2 },
     bool: { probability: 0.5 },
     collection: { minLength: 1, maxLength: 5 },
   },
@@ -140,6 +140,8 @@ These are the built-in library defaults when no global or instance configuration
 | `text` | charset | `'alphanumeric'` |
 | `temporal` | min | 10 years ago |
 | `temporal` | max | 10 years from now |
+| `temporal` | recent | `2` (days) |
+| `temporal` | soon | `2` (days) |
 | `bool` | probability | `0.5` |
 | `collection` | minLength | `1` |
 | `collection` | maxLength | `5` |
@@ -184,7 +186,7 @@ pokemon().level().min(50).create();   // 73
 ```
 
 ::: tip Internals
-`TextFaker` and `NumericFaker` are internal builder classes exposed via `storymock/internals` for advanced use cases like custom domain registration. See the [Faker API Reference — Extensibility](https://storymock.dev/reference/faker#_7-extensibility) for the full interface.
+`TextFaker` and `NumericFaker` are internal builder classes exposed via `storymock/internals` for advanced use cases like custom domain registration. See the [Faker API Reference — Extensibility](/reference/faker#_7-extensibility) for the full interface.
 :::
 
 See the [Faker API — Extensibility](/reference/faker#_7-extensibility) for more details.

@@ -162,43 +162,15 @@ const checkout = story()
 
 ### Setup Accumulation
 
-Multiple `.setup()` calls are **accumulated** — they all run, in order. This is critical for story inheritance:
-
-```typescript
-const base = story()
-  .add('user', UserSchema)
-  .addMany('items', ItemSchema, 2)
-  .setup((m) => { m.user.items = m.items; });
-
-// Extend — adds a new setup WITHOUT losing the first one
-const withCoupon = base
-  .add('coupon', CouponSchema)
-  .setup((m) => {
-    m.user.coupons = [m.coupon];
-    m.coupon.userId = m.user.id;
-  });
-
-// At .create() time, BOTH setups run:
-// 1. m.user.items = m.items
-// 2. m.user.coupons = [m.coupon]; m.coupon.userId = m.user.id
-```
+Multiple `.setup()` calls accumulate — they all run in order. This is critical for [story inheritance](/guide/stories#story-inheritance). See [Working with Stories — Setup accumulation](/guide/stories#wiring-with-setup) for a full example.
 
 ### Lazy Execution
 
-`.setup()` callbacks are only registered — nothing executes until `.create()` is called. If a callback references an entry that doesn't exist (e.g., `m.coupon` when no coupon was added), it will simply be `undefined` at create time. This is intentional — it allows defining forward-looking setups on base stories that only take effect when the entry is added in a derived story.
+Callbacks only run at `.create()` time. If a callback references an entry that doesn't exist, it will be `undefined` — allowing forward-looking setups on base stories.
 
 ### Reusable Wiring Functions
 
-For relationships repeated across many stories, extract the wiring into plain functions:
-
-```typescript
-const wireOrgTeams = (m: { org: Org; teams: Team[] }) => {
-  m.teams.forEach(t => { t.orgId = m.org.id; });
-};
-
-const storyA = story().add('org', OrgSchema).addMany('teams', TeamSchema, 2).setup(wireOrgTeams);
-const storyB = story().add('org', OrgSchema).addMany('teams', TeamSchema, 5).setup(wireOrgTeams);
-```
+Extract repeated wiring logic into plain functions. See [Working with Stories — Reusable Wiring Functions](/guide/stories#reusable-wiring-functions) for the full pattern.
 
 ---
 
@@ -286,77 +258,36 @@ ref('user', 'email')   // resolves to user.email instead of user.id
 
 ### When to Use `ref()` vs `.setup()`
 
-| Pattern | Use | Example |
-|---------|-----|---------|
-| Foreign key (scalar) | `ref()` | `{ userId: ref('user') }` |
-| Array membership | `.setup()` | `m.user.items = m.items` |
-| Complex/computed | `.setup()` | Alternating senders, distributing members |
-
-`ref()` handles ~70% of relationship wiring. `.setup()` handles the rest.
+See [Working with Stories — ref() vs .setup()](/guide/stories#when-to-use-ref-vs-setup) for a comparison table. In short: `ref()` for scalar foreign keys, `.setup()` for array membership and complex wiring.
 
 ---
 
 ## 5. Story-Level `derive()`
 
-Compute additional data from the generated mocks. The derived entry is added to the record.
+Adds a computed entry to the record. Runs after all `.setup()` callbacks.
+
+```typescript
+.derive(name: string, fn: (mocks: Record) => T): Story<Record & { [name]: T }>
+```
 
 ```typescript
 const s = story()
   .add('user', UserSchema)
   .add('item', ItemSchema)
-  .derive('receipt', (mocks) => ({
-    buyer: mocks.user.name,
-    product: mocks.item.name,
-    total: mocks.item.price,
-    date: new Date(),
-  }))
+  .derive('total', (mocks) => mocks.item.price * 1.1)
   .create();
-
-// s.receipt: { buyer: string; product: string; total: number; date: Date }
+// s.total is a number
 ```
 
-`derive()` runs after all `.setup()` callbacks, so it sees the fully-wired mocks.
+See [Working with Stories — Story-Level derive()](/guide/stories#story-level-derive) for a full example.
 
 ---
 
 ## 6. Story Inheritance
 
-Stories are immutable builders. **Define once, reuse everywhere.**
+Every method (`.with()`, `.add()`, `.addMany()`, `.setup()`) returns a **new story**, enabling an inheritance pattern: define a base story once, derive test-specific variants from it. `.setup()` callbacks accumulate across the inheritance chain.
 
-```typescript
-// Base story (defined once, in a shared file)
-const orgBase = story()
-  .add('org', OrgSchema)
-  .addMany('teams', TeamSchema, 2)
-  .setup((m) => {
-    m.teams.forEach(t => { t.orgId = m.org.id; });
-  });
-
-// Extend with more entries and wiring
-const orgWithMembers = orgBase
-  .addMany('members', MemberSchema, 6)
-  .setup((m) => {
-    m.members.forEach((u, i) => {
-      u.teamId = m.teams[i % m.teams.length].id;
-    });
-  });
-
-// Test-specific variants (zero repeated wiring)
-const deletedOrg = orgWithMembers
-  .with('org', 'deleted')
-  .with('teams', 'deleted');
-```
-
-::: info Full example
-[`examples/story-inheritance.ts`](https://storymock.dev/examples#story-inheritance)
-:::
-
-### Why This Works
-
-- `.with()`, `.add()`, `.addMany()`, `.setup()` all return **new stories**
-- `.setup()` callbacks **accumulate** — derived stories inherit all parent setups
-- The base story's wiring is defined once and carries through all variants
-- Each test customizes with traits and overrides, not with re-wiring
+See [Working with Stories — Story Inheritance](/guide/stories#story-inheritance) for the full pattern with examples.
 
 ---
 
@@ -395,9 +326,9 @@ const snapshots = myStory.create(5);
 
 Full working examples are available in the [`examples/`](https://github.com/storymock/storymock/tree/main/examples) directory. Each highlights a **storymock feature**:
 
-- [Fakers & Composability](https://storymock.dev/examples#fakers-composability) — Core/semantic domains, constraint chaining, faker-in-faker, batch, unique
-- [Traits & Customization](https://storymock.dev/examples#traits-customization) — Named states, combining traits, inline overrides, immutable forking
-- [Conditional Fields](https://storymock.dev/examples#conditional-fields) — `when()` with string/number/boolean keys, `derive()`, resolution order
-- [Story Composition](https://storymock.dev/examples#story-composition) — `ref()`, `.setup()`, `addMany`, type accumulation
-- [Story Inheritance](https://storymock.dev/examples#story-inheritance) — Base stories, setup accumulation, cascading `.with()`, targeting
-- [Seeding & Determinism](https://storymock.dev/examples#seeding-determinism) — `.seed()` at every level, reproducible snapshots
+- [Fakers & Composability](/examples#fakers-composability) — Core/semantic domains, constraint chaining, faker-in-faker, batch, unique
+- [Traits & Customization](/examples#traits-customization) — Named states, combining traits, inline overrides, immutable forking
+- [Conditional Fields](/examples#conditional-fields) — `when()` with string/number/boolean keys, `derive()`, resolution order
+- [Story Composition](/examples#story-composition) — `ref()`, `.setup()`, `addMany`, type accumulation
+- [Story Inheritance](/examples#story-inheritance) — Base stories, setup accumulation, cascading `.with()`, targeting
+- [Seeding & Determinism](/examples#seeding-determinism) — `.seed()` at every level, reproducible snapshots

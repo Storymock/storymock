@@ -217,8 +217,8 @@ const CouponSchema = schema<Coupon>({
   }),
 
   expiration: when('status', {
-    expired: temporal().past(),
-    _: temporal().future(),          // '_' is the default/else case
+    expired: temporal().past(1, 'years'),
+    _: temporal().future(1, 'years'),          // '_' is the default/else case
   }),
 });
 ```
@@ -228,7 +228,7 @@ When `type` resolves to `'percentage'`, the price is an integer 5–100. When `'
 `when()` supports string, number, and boolean keys. If no case matches and no `_` default is provided, `.create()` throws a `MissingCaseError`. For complex conditional logic that doesn't fit a case map, use `derive()`.
 
 ::: info Full example
-See [`examples/conditional-fields.ts`](https://storymock.dev/examples#conditional-fields) for the complete example covering string, numeric, and boolean matching plus `derive()`.
+See [`examples/conditional-fields.ts`](/examples#conditional-fields) for the complete example covering string, numeric, and boolean matching plus `derive()`.
 :::
 
 ## Computed Fields: derive()
@@ -261,7 +261,7 @@ CouponSchema.create();
 The callback can also return a faker instead of a literal — storymock will `.create()` it automatically. Derived fields resolve **after** all non-derived fields, so they always see the full object.
 
 ::: info Full example
-See [`examples/conditional-fields.ts`](https://storymock.dev/examples#conditional-fields) for more `derive()` patterns.
+See [`examples/conditional-fields.ts`](/examples#conditional-fields) for more `derive()` patterns.
 :::
 
 ## How Fields Resolve

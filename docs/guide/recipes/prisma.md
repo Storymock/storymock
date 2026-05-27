@@ -35,7 +35,7 @@ export const UserSchema = schema<User>({
   email: text().template('{{uuid}}@example.com'),
   name: person().fullName(),
   role: choice('USER', 'ADMIN'),
-  createdAt: temporal().past(2),
+  createdAt: temporal().past(2, 'years'),
 })
 .trait('admin', { role: 'ADMIN' as const })
 .id((u) => u.id);
@@ -46,7 +46,7 @@ export const PostSchema = schema<Post>({
   content: text().template('Content for post {{uuid}}'),
   published: choice(true, false),
   authorId: '',
-  createdAt: temporal().past(1),
+  createdAt: temporal().past(1, 'years'),
 })
 .trait('published', { published: true })
 .id((p) => p.id);

@@ -255,7 +255,7 @@ const enterpriseOrg = orgWithMembers.with('org', 'enterprise');
 ```
 
 ::: info Full example
-See [`examples/story-inheritance.ts`](https://storymock.dev/examples#story-inheritance) for the complete example including reusable wiring functions, cascading `.with()`, and index targeting.
+See [`examples/story-inheritance.ts`](/examples#story-inheritance) for the complete example including reusable wiring functions, cascading `.with()`, and index targeting.
 :::
 
 ### Why this works
@@ -303,7 +303,7 @@ const large = story().add('org', OrgSchema).addMany('teams', TeamSchema, 5).setu
 ```
 
 ::: info Full example
-See [`examples/story-inheritance.ts`](https://storymock.dev/examples#story-inheritance) for the complete pattern with multiple reusable wiring functions.
+See [`examples/story-inheritance.ts`](/examples#story-inheritance) for the complete pattern with multiple reusable wiring functions.
 :::
 
 ## Full API →
