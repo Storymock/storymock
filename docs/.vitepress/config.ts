@@ -1,26 +1,64 @@
-import { defineConfig } from 'vitepress';
+import { defineConfig, type HeadConfig } from 'vitepress';
+
+const hostname = 'https://storymock.dev';
+const siteTitle = 'storymock';
+const siteDescription =
+  'Composable, type-safe builders for generating related mock data.';
 
 export default defineConfig({
-  title: 'storymock',
-  description:
-    'Composable, type-safe builders for generating related mock data.',
+  title: siteTitle,
+  description: siteDescription,
   cleanUrls: true,
   appearance: 'dark',
+
+  sitemap: {
+    hostname,
+  },
 
   head: [
     ['meta', { name: 'theme-color', content: '#7c3aed' }],
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:title', content: 'storymock' }],
+    ['meta', { property: 'og:site_name', content: siteTitle }],
+    ['meta', { property: 'og:locale', content: 'en' }],
+    ['meta', { name: 'twitter:card', content: 'summary' }],
+    ['meta', { name: 'twitter:site', content: '@storymock' }],
     [
-      'meta',
-      {
-        property: 'og:description',
-        content:
-          'Composable, type-safe builders for generating related mock data.',
-      },
+      'script',
+      { type: 'application/ld+json' },
+      JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: siteTitle,
+        url: hostname,
+        description: siteDescription,
+      }),
     ],
-    ['meta', { property: 'og:url', content: 'https://storymock.dev' }],
   ],
+
+  transformHead({ pageData }) {
+    const head: HeadConfig[] = [];
+    const canonicalPath = pageData.relativePath
+      .replace(/index\.md$/, '')
+      .replace(/\.md$/, '');
+    const canonicalUrl = `${hostname}/${canonicalPath}`;
+    const pageTitle = pageData.frontmatter.title || pageData.title || siteTitle;
+    const pageDescription = pageData.frontmatter.description || siteDescription;
+
+    head.push(['link', { rel: 'canonical', href: canonicalUrl }]);
+    head.push(['meta', { property: 'og:title', content: pageTitle }]);
+    head.push([
+      'meta',
+      { property: 'og:description', content: pageDescription },
+    ]);
+    head.push(['meta', { property: 'og:url', content: canonicalUrl }]);
+    head.push(['meta', { name: 'twitter:title', content: pageTitle }]);
+    head.push([
+      'meta',
+      { name: 'twitter:description', content: pageDescription },
+    ]);
+
+    return head;
+  },
 
   themeConfig: {
     nav: [
