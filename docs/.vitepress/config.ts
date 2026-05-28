@@ -167,7 +167,7 @@ export default defineConfig({
 
     footer: {
       message:
-        'Released under the <a href="https://github.com/storymock/storymock/blob/main/LICENSE" target="_blank">MIT License</a>. <a href="https://github.com/storymock/storymock/blob/main/CONTRIBUTION_GUIDE.md" target="_blank">Contributing</a>',
+        'Released under the <a href="https://github.com/storymock/storymock/blob/main/LICENSE" target="_blank">MIT License</a>. Powered by <a href="https://github.com/faker-js/faker" target="_blank">@faker-js/faker</a>. <a href="https://github.com/storymock/storymock/blob/main/CONTRIBUTION_GUIDE.md" target="_blank">Contributing</a>',
       copyright:
         'Copyright © 2025-present <a href="https://github.com/storymock" target="_blank">storymock</a>',
     },

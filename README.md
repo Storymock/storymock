@@ -106,3 +106,9 @@ Full docs site: run `cd docs && pnpm install && pnpm dev`
 **More:**
 - [Examples](https://storymock.dev/examples) — Complete working examples
 - [Contributing](CONTRIBUTION_GUIDE.md) — Architecture and design decisions
+
+## Acknowledgments
+
+storymock is powered by [`@faker-js/faker`](https://github.com/faker-js/faker) for its default data generation. Faker.js is an incredible open-source library and storymock would not exist without the work of its maintainers and contributors.
+
+See [THIRD_PARTY_LICENSES](THIRD_PARTY_LICENSES) for full license details.
